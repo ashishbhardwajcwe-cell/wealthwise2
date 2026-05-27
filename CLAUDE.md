@@ -767,6 +767,7 @@ The following client-facing features were added on top of the original WealthWis
 2. **Lifecycle support visualisation** — `LifecycleSupport` renders a four-stage trust timeline on the landing page: pre-investment due diligence → transaction execution → post-investment reporting → exit & rebalancing.
 3. **Drill-down asset allocation** — `DrillDownAllocation` is a Recharts pie with breadcrumb navigation. Click a slice to zoom in: asset class → holding → sector → geography (sector/geography come from optional `detail` on each asset; demo data includes it).
 4. **Customisable PDF report** — `PdfExportModal` lets the user pick which sections to include, add a personal note, and toggle a branded cover page, then exports via the browser's print-to-PDF (`@media print` styles hide nav/footer/buttons). The artifact is forwardable to a CA, spouse or partner.
+5. **Financial Freedom Number** — a hero section in the report showing the corpus at which work becomes optional (the FI / FIRE number = annual expenses ÷ 4% safe-withdrawal rate ≈ 25×). Shows progress vs current financial assets, the passive income those assets generate, the remaining gap, and an estimated years-to-freedom projection using the portfolio return and expense inflation.
 
 ---
 

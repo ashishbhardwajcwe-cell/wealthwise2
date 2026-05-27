@@ -1078,6 +1078,7 @@ const DrillDownAllocation = ({ root }) => {
 // CUSTOMISABLE PDF EXPORT
 // ════════════════════════════════════════════════════
 const PDF_SECTIONS = [
+  { key:"freedom", label:"Freedom Number" },
   { key:"swot", label:"SWOT Analysis" },
   { key:"cashflow", label:"Cashflow Analysis" },
   { key:"networth", label:"Net Worth & Assets" },
@@ -1140,7 +1141,7 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
   const [pdfConfig, setPdfConfig] = useState({
     cover: true,
     note: "",
-    sections: { swot:true, cashflow:true, networth:true, goals:true, retirement:true, projection:true, ai:true, actionables:true },
+    sections: { freedom:true, swot:true, cashflow:true, networth:true, goals:true, retirement:true, projection:true, ai:true, actionables:true },
   });
   const generatePdf = () => { setShowPdfModal(false); setTimeout(() => window.print(), 250); };
 
@@ -1165,6 +1166,24 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
   const portR = (data.equityAlloc/100)*(data.equityReturn/100)+(data.debtAlloc/100)*(data.debtReturn/100);
   const postRetR = 0.10;
   const contingency = totExpM * 6;
+
+  // Financial Freedom Number (a.k.a. FI / FIRE number): the corpus that, drawn at a
+  // safe withdrawal rate, funds your regular expenses indefinitely — so earning becomes optional.
+  const SWR = 0.04; // 4% safe-withdrawal rule → 25× annual expenses
+  const freedomNumber = totExp / SWR;
+  const freedomProgress = freedomNumber > 0 ? Math.min((totFA / freedomNumber) * 100, 100) : 100;
+  const freedomGap = Math.max(freedomNumber - totFA, 0);
+  const passiveIncomeM = (totFA * SWR) / 12; // monthly income current financial assets can safely generate
+  const infl = data.generalInflation / 100;
+  let yearsToFreedom = (totFA >= freedomNumber) ? 0 : null;
+  if (yearsToFreedom === null) {
+    let corpus = totFA;
+    for (let y = 1; y <= 60; y++) {
+      corpus = corpus * (1 + portR) + Math.max(savM, 0) * 12;
+      const freedomAtY = (totExp * Math.pow(1 + infl, y)) / SWR;
+      if (corpus >= freedomAtY) { yearsToFreedom = y; break; }
+    }
+  }
 
   const goalsBase = data.goals.map(g => {
     const y = g.year - yr;
@@ -1259,6 +1278,53 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
         <MetricCard icon="⏱️" label="Years to Retire" value={yToRet} sub={`${yInRet} yrs in retirement`} color={T.teal} />
         <MetricCard icon="💰" label="Net Worth" value={fmt(nw)} sub={`Fin. ratio: ${faR}%`} color={T.gold} />
         <MetricCard icon="📈" label="Savings Rate" value={`${savRat}%`} sub={`${fmt(savM)}/month`} color={T.emerald} />
+      </div>
+
+      {/* Financial Freedom Number */}
+      <div className="fadeUp report-section section-freedom" style={{ marginBottom:36 }}>
+        <div style={{ background:`linear-gradient(135deg, ${T.navy}, ${T.ocean})`, borderRadius:20, padding:32, position:"relative", overflow:"hidden" }}>
+          <div style={{ position:"absolute", top:-40, right:-40, width:160, height:160, borderRadius:"50%", background:`${T.gold}10` }} />
+          <div style={{ position:"relative", zIndex:1 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:6 }}>
+              <div style={{ width:48, height:48, borderRadius:14, background:`linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, boxShadow:`0 4px 16px ${T.gold}30` }}>🕊️</div>
+              <div>
+                <h2 style={{ fontFamily:DISPLAY, fontSize:26, fontWeight:700, color:T.white }}>Your Financial Freedom Number</h2>
+                <p style={{ color:`${T.white}60`, fontSize:13 }}>The corpus at which work becomes optional — your investments cover your expenses</p>
+              </div>
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:14, marginTop:18 }}>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>Freedom Number</div>
+                <div style={{ fontSize:30, fontWeight:800, color:T.white, fontFamily:DISPLAY, marginTop:2 }}>{fmt(freedomNumber)}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>≈ 25× your annual expenses of {fmt(totExp)}</div>
+              </div>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>Already Covered</div>
+                <div style={{ fontSize:30, fontWeight:800, color:T.white, fontFamily:DISPLAY, marginTop:2 }}>{fmt(totFA)}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>generates ≈ {fmt(passiveIncomeM)}/mo passive income</div>
+              </div>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>{freedomGap > 0 ? "Still Needed" : "Status"}</div>
+                <div style={{ fontSize:30, fontWeight:800, color: freedomGap > 0 ? T.white : T.emerald, fontFamily:DISPLAY, marginTop:2 }}>{freedomGap > 0 ? fmt(freedomGap) : "Free 🎉"}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>
+                  {freedomGap <= 0 ? "Your assets already cover your expenses"
+                    : yearsToFreedom != null ? `≈ ${yearsToFreedom} ${yearsToFreedom===1?"year":"years"} away at current savings`
+                    : "Increase savings to reach this goal"}
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop:18 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", fontSize:12, marginBottom:6, color:`${T.white}90`, fontWeight:600 }}>
+                <span>Progress to financial freedom</span>
+                <span style={{ color:T.goldLight }}>{freedomProgress.toFixed(0)}%</span>
+              </div>
+              <div style={{ height:10, borderRadius:5, background:`${T.white}1A`, overflow:"hidden" }}>
+                <div style={{ height:"100%", borderRadius:5, width:`${freedomProgress}%`, background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})`, transition:"width 1.2s cubic-bezier(.4,0,.2,1)" }} />
+              </div>
+              <p style={{ fontSize:11, color:`${T.white}45`, marginTop:10, lineHeight:1.6 }}>Based on the 4% safe-withdrawal rule applied to your financial assets and current annual expenses. Projection assumes a {(portR*100).toFixed(1)}% portfolio return and {(infl*100).toFixed(0)}% expense inflation. This is an educational estimate, not investment advice.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* SWOT */}
