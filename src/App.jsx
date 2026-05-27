@@ -304,12 +304,24 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // NAVBAR
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const Navbar = ({ user, isDemo, onAuthClick, onLogout, onLogoClick }) => (
+const Navbar = ({ user, isDemo, onAuthClick, onLogout, onLogoClick, onGuided, guidedActive }) => (
   <nav className="glass no-print" style={{ position:"sticky", top:0, zIndex:100, padding:"12px 24px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:`1px solid ${T.gold}15` }}>
     <div onClick={onLogoClick} style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer" }}>
       <img src="/auris-logo.png" alt="Auris" style={{ height:44, objectFit:"contain" }} />
     </div>
     <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+      {/* GUIDED PLAN TAB — separate YNAB-style guided experience */}
+      {onGuided && (
+        <button onClick={onGuided}
+          style={{
+            padding:"8px 16px", borderRadius:10, fontSize:12, fontWeight:700,
+            background: guidedActive ? `linear-gradient(135deg, ${T.gold}, ${T.goldLight})` : `${T.navy}08`,
+            color: guidedActive ? T.navy : T.navy, border:`1px solid ${guidedActive ? T.gold : T.silver+"40"}`,
+            display:"inline-flex", alignItems:"center", gap:6, cursor:"pointer", whiteSpace:"nowrap", transition:"all 0.3s"
+          }}>
+          ✨ Guided Plan
+        </button>
+      )}
       {/* FREE GUIDE BUTTON — shown when logged in or demo */}
       {(user || isDemo) && (
         <a href="/auris-financial-independence-playbook.pdf" download
@@ -1078,6 +1090,7 @@ const DrillDownAllocation = ({ root }) => {
 // CUSTOMISABLE PDF EXPORT
 // ════════════════════════════════════════════════════
 const PDF_SECTIONS = [
+  { key:"freedom", label:"Freedom Number" },
   { key:"swot", label:"SWOT Analysis" },
   { key:"cashflow", label:"Cashflow Analysis" },
   { key:"networth", label:"Net Worth & Assets" },
@@ -1140,7 +1153,7 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
   const [pdfConfig, setPdfConfig] = useState({
     cover: true,
     note: "",
-    sections: { swot:true, cashflow:true, networth:true, goals:true, retirement:true, projection:true, ai:true, actionables:true },
+    sections: { freedom:true, swot:true, cashflow:true, networth:true, goals:true, retirement:true, projection:true, ai:true, actionables:true },
   });
   const generatePdf = () => { setShowPdfModal(false); setTimeout(() => window.print(), 250); };
 
@@ -1165,6 +1178,24 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
   const portR = (data.equityAlloc/100)*(data.equityReturn/100)+(data.debtAlloc/100)*(data.debtReturn/100);
   const postRetR = 0.10;
   const contingency = totExpM * 6;
+
+  // Financial Freedom Number (a.k.a. FI / FIRE number): the corpus that, drawn at a
+  // safe withdrawal rate, funds your regular expenses indefinitely — so earning becomes optional.
+  const SWR = 0.04; // 4% safe-withdrawal rule → 25× annual expenses
+  const freedomNumber = totExp / SWR;
+  const freedomProgress = freedomNumber > 0 ? Math.min((totFA / freedomNumber) * 100, 100) : 100;
+  const freedomGap = Math.max(freedomNumber - totFA, 0);
+  const passiveIncomeM = (totFA * SWR) / 12; // monthly income current financial assets can safely generate
+  const infl = data.generalInflation / 100;
+  let yearsToFreedom = (totFA >= freedomNumber) ? 0 : null;
+  if (yearsToFreedom === null) {
+    let corpus = totFA;
+    for (let y = 1; y <= 60; y++) {
+      corpus = corpus * (1 + portR) + Math.max(savM, 0) * 12;
+      const freedomAtY = (totExp * Math.pow(1 + infl, y)) / SWR;
+      if (corpus >= freedomAtY) { yearsToFreedom = y; break; }
+    }
+  }
 
   const goalsBase = data.goals.map(g => {
     const y = g.year - yr;
@@ -1259,6 +1290,53 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
         <MetricCard icon="⏱️" label="Years to Retire" value={yToRet} sub={`${yInRet} yrs in retirement`} color={T.teal} />
         <MetricCard icon="💰" label="Net Worth" value={fmt(nw)} sub={`Fin. ratio: ${faR}%`} color={T.gold} />
         <MetricCard icon="📈" label="Savings Rate" value={`${savRat}%`} sub={`${fmt(savM)}/month`} color={T.emerald} />
+      </div>
+
+      {/* Financial Freedom Number */}
+      <div className="fadeUp report-section section-freedom" style={{ marginBottom:36 }}>
+        <div style={{ background:`linear-gradient(135deg, ${T.navy}, ${T.ocean})`, borderRadius:20, padding:32, position:"relative", overflow:"hidden" }}>
+          <div style={{ position:"absolute", top:-40, right:-40, width:160, height:160, borderRadius:"50%", background:`${T.gold}10` }} />
+          <div style={{ position:"relative", zIndex:1 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:6 }}>
+              <div style={{ width:48, height:48, borderRadius:14, background:`linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, boxShadow:`0 4px 16px ${T.gold}30` }}>🕊️</div>
+              <div>
+                <h2 style={{ fontFamily:DISPLAY, fontSize:26, fontWeight:700, color:T.white }}>Your Financial Freedom Number</h2>
+                <p style={{ color:`${T.white}60`, fontSize:13 }}>The corpus at which work becomes optional — your investments cover your expenses</p>
+              </div>
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:14, marginTop:18 }}>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>Freedom Number</div>
+                <div style={{ fontSize:30, fontWeight:800, color:T.white, fontFamily:DISPLAY, marginTop:2 }}>{fmt(freedomNumber)}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>≈ 25× your annual expenses of {fmt(totExp)}</div>
+              </div>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>Already Covered</div>
+                <div style={{ fontSize:30, fontWeight:800, color:T.white, fontFamily:DISPLAY, marginTop:2 }}>{fmt(totFA)}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>generates ≈ {fmt(passiveIncomeM)}/mo passive income</div>
+              </div>
+              <div style={{ background:`${T.white}0D`, borderRadius:14, padding:18 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:T.goldLight, textTransform:"uppercase", letterSpacing:"0.06em" }}>{freedomGap > 0 ? "Still Needed" : "Status"}</div>
+                <div style={{ fontSize:30, fontWeight:800, color: freedomGap > 0 ? T.white : T.emerald, fontFamily:DISPLAY, marginTop:2 }}>{freedomGap > 0 ? fmt(freedomGap) : "Free 🎉"}</div>
+                <div style={{ fontSize:12, color:`${T.white}55`, marginTop:2 }}>
+                  {freedomGap <= 0 ? "Your assets already cover your expenses"
+                    : yearsToFreedom != null ? `≈ ${yearsToFreedom} ${yearsToFreedom===1?"year":"years"} away at current savings`
+                    : "Increase savings to reach this goal"}
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop:18 }}>
+              <div style={{ display:"flex", justifyContent:"space-between", fontSize:12, marginBottom:6, color:`${T.white}90`, fontWeight:600 }}>
+                <span>Progress to financial freedom</span>
+                <span style={{ color:T.goldLight }}>{freedomProgress.toFixed(0)}%</span>
+              </div>
+              <div style={{ height:10, borderRadius:5, background:`${T.white}1A`, overflow:"hidden" }}>
+                <div style={{ height:"100%", borderRadius:5, width:`${freedomProgress}%`, background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})`, transition:"width 1.2s cubic-bezier(.4,0,.2,1)" }} />
+              </div>
+              <p style={{ fontSize:11, color:`${T.white}45`, marginTop:10, lineHeight:1.6 }}>Based on the 4% safe-withdrawal rule applied to your financial assets and current annual expenses. Projection assumes a {(portR*100).toFixed(1)}% portfolio return and {(infl*100).toFixed(0)}% expense inflation. This is an educational estimate, not investment advice.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* SWOT */}
@@ -1647,6 +1725,254 @@ const SiteFooter = () => (
 );
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ════════════════════════════════════════════════════
+// GUIDED PLAN (YNAB-style) — simple questions → numbers → plan
+// ════════════════════════════════════════════════════
+const toNum = (v) => { const x = parseFloat(v); return isNaN(x) ? 0 : x; };
+
+const GUIDED_QUESTIONS = [
+  { id:"lifeStage", q:"Where are you in life right now?", sub:"This helps us pick the right time horizon.", type:"single",
+    options:[{icon:"🌱",label:"Just starting out",value:"start"},{icon:"🚀",label:"Building my career",value:"build"},{icon:"💼",label:"Peak earning years",value:"peak"},{icon:"🏖️",label:"Near / in retirement",value:"retire"}] },
+  { id:"ageBand", q:"Which age group are you in?", sub:"A rough range is fine — you'll confirm the exact age later.", type:"single",
+    options:[{icon:"🧑",label:"20s",value:25},{icon:"🧑‍💼",label:"30s",value:35},{icon:"👨‍👩‍👧",label:"40s",value:45},{icon:"🧓",label:"50s",value:55},{icon:"👴",label:"60 or above",value:65}] },
+  { id:"dependents", q:"Who depends on you financially?", sub:"Pick all that apply.", type:"multi",
+    options:[{icon:"🧍",label:"Just me",value:"self"},{icon:"💑",label:"Spouse / partner",value:"spouse"},{icon:"🧒",label:"Children",value:"kids"},{icon:"👵",label:"Parents",value:"parents"}] },
+  { id:"kids", q:"How many children do you support?", sub:"", type:"single", showIf:a=>Array.isArray(a.dependents)&&a.dependents.includes("kids"),
+    options:[{icon:"1️⃣",label:"One",value:1},{icon:"2️⃣",label:"Two",value:2},{icon:"3️⃣",label:"Three or more",value:3}] },
+  { id:"home", q:"What's your home situation?", sub:"", type:"single",
+    options:[{icon:"🔑",label:"Renting",value:"rent"},{icon:"🏠",label:"Own — with a home loan",value:"loan"},{icon:"🏡",label:"Own — fully paid",value:"owned"}] },
+  { id:"car", q:"Do you own a car?", sub:"", type:"single",
+    options:[{icon:"🚌",label:"No car",value:"none"},{icon:"🚗",label:"Yes — paid off",value:"paid"},{icon:"🚙",label:"Yes — on loan",value:"loan"}] },
+  { id:"incomeStability", q:"How steady is your income?", sub:"", type:"single",
+    options:[{icon:"🏢",label:"Very steady (salaried)",value:"steady"},{icon:"📊",label:"Mostly steady",value:"mostly"},{icon:"📈",label:"Variable / business",value:"variable"},{icon:"🎲",label:"Irregular",value:"irregular"}] },
+  { id:"spending", q:"How would you describe your spending?", sub:"Be honest — there's no wrong answer.", type:"single",
+    options:[{icon:"🐷",label:"I save a lot",value:"saver"},{icon:"🙂",label:"I save some",value:"some"},{icon:"⚖️",label:"I break even",value:"even"},{icon:"😅",label:"I tend to overspend",value:"over"}] },
+  { id:"investing", q:"Do you already invest?", sub:"", type:"single",
+    options:[{icon:"🆕",label:"Not yet",value:"none"},{icon:"🏦",label:"A little (FDs, savings)",value:"little"},{icon:"📅",label:"Yes — regular SIPs / stocks",value:"regular"},{icon:"💎",label:"Extensively",value:"lots"}] },
+  { id:"goal", q:"What's your #1 financial goal?", sub:"We'll build the plan around this.", type:"single",
+    options:[{icon:"🏠",label:"Buy a home",value:"home"},{icon:"🎓",label:"Kids' education",value:"education"},{icon:"🏝️",label:"Retire early",value:"retire"},{icon:"📈",label:"Build wealth",value:"wealth"},{icon:"🛟",label:"Emergency safety net",value:"emergency"},{icon:"✈️",label:"Travel / lifestyle",value:"travel"}] },
+  { id:"risk", q:"If your investments dropped 20% in a month, you'd…", sub:"This sets your risk profile.", type:"single",
+    options:[{icon:"😱",label:"Sell everything",value:"cons"},{icon:"😟",label:"Worry, maybe sell some",value:"bal-"},{icon:"😐",label:"Hold and wait it out",value:"bal"},{icon:"😎",label:"Invest more — it's a sale!",value:"agg"}] },
+  { id:"retireAge", q:"When do you want work to become optional?", sub:"Your target financial-freedom age.", type:"single",
+    options:[{icon:"⚡",label:"By 45",value:45},{icon:"🎯",label:"By 50",value:50},{icon:"🛠️",label:"By 55",value:55},{icon:"🌅",label:"By 60",value:60},{icon:"⏳",label:"65 or later",value:65}] },
+];
+
+function buildGuidedData(answers, n) {
+  const base = JSON.parse(JSON.stringify(defaultData));
+  const yr = new Date().getFullYear();
+  const age = parseInt(n.age) || answers.ageBand || 35;
+  base.name = (n.name || "").trim();
+  base.dob = `${yr - age}-01-01`;
+  base.retirementAge = answers.retireAge || 55;
+  const riskMap = { cons:["Conservative",40], "bal-":["Balanced",60], bal:["Balanced",70], agg:["Aggressive",85] };
+  const [rp, eq] = riskMap[answers.risk] || ["Balanced",70];
+  base.riskProfile = rp; base.equityAlloc = eq; base.debtAlloc = 100 - eq;
+  base.salaryMonthly = toNum(n.income); base.otherIncomeMonthly = 0;
+  const exp = toNum(n.expenses);
+  const hasKids = Array.isArray(answers.dependents) && answers.dependents.includes("kids");
+  if (hasKids) { base.householdExp=Math.round(exp*0.55); base.childcareExp=Math.round(exp*0.20); base.vacationExp=Math.round(exp*0.10); base.giftsExp=Math.round(exp*0.05); base.otherExp=Math.round(exp*0.10); }
+  else { base.householdExp=Math.round(exp*0.70); base.childcareExp=0; base.vacationExp=Math.round(exp*0.12); base.giftsExp=Math.round(exp*0.06); base.otherExp=Math.round(exp*0.12); }
+  base.sipMonthly = toNum(n.sip); base.pfMonthly = 0;
+  const sav = toNum(n.savings);
+  base.assets = [
+    { name:"Equity Investments", type:"Equity", value: Math.round(sav*eq/100) },
+    { name:"Debt / Savings / FD", type:"Debt", value: Math.round(sav*(100-eq)/100) },
+  ];
+  base.physicalAssets = [];
+  if ((answers.home==="owned" || answers.home==="loan") && toNum(n.homeValue) > 0) base.physicalAssets.push({ name:"Home", value: toNum(n.homeValue) });
+  base.liabilities = [];
+  if (answers.home==="loan" && (toNum(n.homeOutstanding)>0 || toNum(n.homeEMI)>0)) base.liabilities.push({ name:"Home Loan", emi:toNum(n.homeEMI), outstanding:toNum(n.homeOutstanding), rate:8.5 });
+  if (answers.car==="loan" && (toNum(n.carOutstanding)>0 || toNum(n.carEMI)>0)) base.liabilities.push({ name:"Car Loan", emi:toNum(n.carEMI), outstanding:toNum(n.carOutstanding), rate:9.5 });
+  const gt = toNum(n.goalTarget);
+  const yToRet = Math.max(base.retirementAge - age, 1);
+  const annualExp = exp * 12;
+  const goalMap = {
+    home:      { name:"Home Purchase",          year: yr+7,      val: gt||8000000,            infl:5,  pr:"High" },
+    education: { name:"Children's Education",    year: yr+15,     val: gt||3000000,            infl:10, pr:"High" },
+    retire:    { name:"Early Retirement Fund",   year: yr+yToRet, val: annualExp*15||5000000,  infl:6,  pr:"High" },
+    wealth:    { name:"Wealth Building",         year: yr+15,     val: gt||5000000,            infl:6,  pr:"Medium" },
+    emergency: { name:"Emergency Fund",          year: yr+1,      val: exp*6||300000,          infl:6,  pr:"High" },
+    travel:    { name:"Travel / Lifestyle",      year: yr+3,      val: gt||500000,             infl:6,  pr:"Low" },
+  };
+  const goals = [];
+  const p = goalMap[answers.goal] || goalMap.wealth;
+  goals.push({ name:p.name, year:p.year, currentValue:p.val, inflation:p.infl, priority:p.pr });
+  if (hasKids && answers.goal !== "education") goals.push({ name:"Children's Education", year: yr+15, currentValue: 3000000*(answers.kids||1), inflation:10, priority:"High" });
+  if (answers.goal !== "retire") goals.push({ name:"Retirement Corpus", year: yr+yToRet, currentValue: annualExp*12||5000000, inflation:6, priority:"High" });
+  base.goals = goals;
+  return base;
+}
+
+const GuidedBudgetCard = ({ data }) => {
+  const income = data.salaryMonthly + data.otherIncomeMonthly;
+  const essentials = data.householdExp + data.childcareExp;
+  const lifestyle = data.vacationExp + data.giftsExp + data.otherExp;
+  const emis = data.liabilities.reduce((s,l)=>s+(l.emi||0),0);
+  const investing = data.sipMonthly + data.pfMonthly;
+  const spent = essentials + lifestyle + emis + investing;
+  const leftover = Math.max(income - spent, 0);
+  const overAssigned = spent > income;
+  const savingsRate = income > 0 ? Math.round((income - essentials - lifestyle - emis) / income * 100) : 0;
+  const segs = [
+    { label:"Essentials", val:essentials, color:T.navy },
+    { label:"Lifestyle", val:lifestyle, color:T.teal },
+    { label:"Loan EMIs", val:emis, color:T.ruby },
+    { label:"Investing", val:investing, color:T.emerald },
+    { label:"Unassigned", val:leftover, color:T.gold },
+  ].filter(s=>s.val>0);
+  const denom = Math.max(income, spent, 1);
+  return (
+    <div className="no-print" style={{ background:T.white, borderRadius:16, padding:24, boxShadow:"0 2px 16px rgba(0,0,0,0.04)", marginTop:24 }}>
+      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:4 }}>
+        <span style={{ fontSize:22 }}>💸</span>
+        <h3 style={{ fontFamily:DISPLAY, fontSize:22, fontWeight:700, color:T.navy }}>Your Monthly Money Plan</h3>
+      </div>
+      <p style={{ fontSize:13, color:T.steel, marginBottom:16 }}>Give every rupee a job — here's where your {fmt(income)}/month goes.</p>
+      <div style={{ display:"flex", height:26, borderRadius:8, overflow:"hidden", marginBottom:14, background:`${T.silver}20` }}>
+        {segs.map((s,i)=><div key={i} title={`${s.label}: ${fmt(s.val)}`} style={{ width:`${s.val/denom*100}%`, background:s.color }} />)}
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))", gap:8 }}>
+        {segs.map((s,i)=>(
+          <div key={i} style={{ display:"flex", alignItems:"center", gap:8, fontSize:13 }}>
+            <span style={{ width:10, height:10, borderRadius:3, background:s.color }} />
+            <span style={{ color:T.slate }}>{s.label}</span>
+            <span style={{ marginLeft:"auto", fontWeight:700, color:T.navy }}>{fmt(s.val)}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop:16, padding:14, borderRadius:12, background: overAssigned?`${T.ruby}0D`:`${T.emerald}0D`, border:`1px solid ${overAssigned?T.ruby:T.emerald}25`, fontSize:14, color:T.navy, lineHeight:1.6 }}>
+        {overAssigned
+          ? <>⚠️ You're spending about <strong>{fmt(spent-income)}/month</strong> more than you earn. Trim lifestyle costs or grow income before adding new goals.</>
+          : <>✅ Savings rate <strong>{savingsRate}%</strong> · <strong>{fmt(leftover)}/month</strong> still unassigned — put it to work via SIPs or toward your goals below.</>}
+      </div>
+    </div>
+  );
+};
+
+const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
+  const [phase, setPhase] = useState("quiz");   // quiz | numbers | report
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [numbers, setNumbers] = useState({});
+  const [data, setData] = useState(null);
+  const [showProModal, setShowProModal] = useState(false);
+
+  const visible = GUIDED_QUESTIONS.filter(q => !q.showIf || q.showIf(answers));
+  const idx = Math.min(step, visible.length - 1);
+  const q = visible[idx];
+
+  const next = () => { if (step >= visible.length - 1) { setPhase("numbers"); window.scrollTo({top:0}); } else setStep(step + 1); };
+  const back = () => { if (step <= 0) onExit(); else setStep(step - 1); };
+  const pick = (val) => { setAnswers(a => ({ ...a, [q.id]: val })); setTimeout(next, 150); };
+  const toggle = (val) => setAnswers(a => { const cur = Array.isArray(a[q.id]) ? a[q.id] : []; return { ...a, [q.id]: cur.includes(val) ? cur.filter(x=>x!==val) : [...cur, val] }; });
+  const isSel = (val) => q.type === "multi" ? (Array.isArray(answers[q.id]) && answers[q.id].includes(val)) : answers[q.id] === val;
+
+  const setN = (k) => (v) => setNumbers(p => ({ ...p, [k]: v }));
+  const createPlan = () => {
+    if (toNum(numbers.income) <= 0) { alert("Please enter your monthly take-home income to build the plan."); return; }
+    setData(buildGuidedData(answers, numbers));
+    setPhase("report");
+    window.scrollTo({ top:0, behavior:"smooth" });
+  };
+  const getAge = () => data?.dob ? new Date().getFullYear() - new Date(data.dob).getFullYear() : 35;
+
+  const goalLabels = { home:"Approx. cost of the home today", education:"Total education cost today", travel:"Budget for this goal today" };
+  const showGoalTarget = ["home","education","travel"].includes(answers.goal);
+
+  // ── REPORT ──────────────────────────────────────────
+  if (phase === "report" && data) {
+    return (
+      <div>
+        <div className="no-print" style={{ maxWidth:920, margin:"0 auto", padding:"16px 16px 0", display:"flex", gap:10 }}>
+          <button onClick={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} style={{ padding:"8px 16px", borderRadius:10, fontSize:13, fontWeight:600, background:`${T.navy}08`, border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>← Edit answers</button>
+          <button onClick={onExit} style={{ padding:"8px 16px", borderRadius:10, fontSize:13, fontWeight:600, background:"transparent", border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>✕ Exit Guided Plan</button>
+        </div>
+        <div style={{ maxWidth:920, margin:"0 auto", padding:"0 16px" }}>
+          <GuidedBudgetCard data={data} />
+        </div>
+        <ReportView data={data} getAge={getAge} onBack={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} aiAnalysis={null} aiLoading={false} onRequestAI={()=> onAuthClick ? onAuthClick() : null} showProModal={showProModal} setShowProModal={setShowProModal} />
+      </div>
+    );
+  }
+
+  // ── QUIZ + NUMBERS ──────────────────────────────────
+  return (
+    <div style={{ maxWidth:680, margin:"0 auto", padding:"28px 16px 80px" }}>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
+        <span style={{ fontSize:13, fontWeight:700, color:T.gold, letterSpacing:"0.04em" }}>✨ GUIDED PLAN</span>
+        <button onClick={onExit} style={{ padding:"6px 14px", borderRadius:8, fontSize:12, fontWeight:600, background:"transparent", border:`1px solid ${T.silver}50`, color:T.slate, cursor:"pointer" }}>✕ Exit</button>
+      </div>
+
+      {phase === "quiz" && (
+        <>
+          <div style={{ height:6, borderRadius:3, background:`${T.silver}30`, marginBottom:10 }}>
+            <div style={{ height:"100%", borderRadius:3, width:`${(idx/(visible.length))*100}%`, background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})`, transition:"width .4s" }} />
+          </div>
+          <div style={{ fontSize:12, color:T.steel, marginBottom:14 }}>Question {idx+1} of {visible.length}</div>
+          <h2 style={{ fontFamily:DISPLAY, fontSize:"clamp(24px,4vw,30px)", fontWeight:700, color:T.navy, lineHeight:1.2 }}>{q.q}</h2>
+          {q.sub && <p style={{ color:T.slate, fontSize:15, marginTop:8 }}>{q.sub}</p>}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:12, marginTop:24 }}>
+            {q.options.map(o => (
+              <button key={String(o.value)} onClick={()=> q.type==="multi" ? toggle(o.value) : pick(o.value)}
+                style={{ display:"flex", alignItems:"center", gap:12, padding:"16px 18px", borderRadius:14, textAlign:"left", cursor:"pointer",
+                  border:`2px solid ${isSel(o.value)?T.gold:`${T.silver}40`}`, background:isSel(o.value)?`${T.gold}10`:T.white,
+                  fontFamily:BODY, fontSize:15, fontWeight:600, color:T.navy, transition:"all .2s", boxShadow: isSel(o.value)?`0 4px 16px ${T.gold}20`:"0 1px 4px rgba(0,0,0,0.04)" }}>
+                <span style={{ fontSize:24 }}>{o.icon}</span>{o.label}
+              </button>
+            ))}
+          </div>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:28 }}>
+            <button onClick={back} className="btn-navy" style={{ padding:"12px 24px", borderRadius:12, fontSize:15 }}>← Back</button>
+            {q.type==="multi"
+              ? <button onClick={next} className="btn-gold" style={{ padding:"12px 28px", borderRadius:12, fontSize:15, opacity:(answers[q.id]&&answers[q.id].length)?1:0.5 }} disabled={!(answers[q.id]&&answers[q.id].length)}>Next →</button>
+              : <span style={{ fontSize:12, color:T.steel, fontStyle:"italic" }}>Tap an option to continue</span>}
+          </div>
+        </>
+      )}
+
+      {phase === "numbers" && (
+        <>
+          <div style={{ height:6, borderRadius:3, background:`${T.silver}30`, marginBottom:14 }}>
+            <div style={{ height:"100%", borderRadius:3, width:"95%", background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})` }} />
+          </div>
+          <h2 style={{ fontFamily:DISPLAY, fontSize:"clamp(24px,4vw,30px)", fontWeight:700, color:T.navy, lineHeight:1.2 }}>A few numbers to finish</h2>
+          <p style={{ color:T.slate, fontSize:15, marginTop:8 }}>Approximate is fine — you can fine-tune later in the Detailed Planner.</p>
+          <div style={{ background:T.white, borderRadius:18, padding:28, boxShadow:"0 4px 32px rgba(10,22,40,0.06)", border:`1px solid ${T.gold}10`, marginTop:18 }}>
+            <Field label="Your Name (optional)" value={numbers.name||""} onChange={setN("name")} placeholder="e.g. Rajesh Kumar" />
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+              <Field label="Your Age" type="number" value={numbers.age ?? (answers.ageBand||"")} onChange={setN("age")} />
+              <Field label="Monthly Take-home Income" type="number" prefix="₹" value={numbers.income||""} onChange={setN("income")} />
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+              <Field label="Monthly Expenses" type="number" prefix="₹" value={numbers.expenses||""} onChange={setN("expenses")} />
+              <Field label="Monthly Amount You Invest" type="number" prefix="₹" value={numbers.sip||""} onChange={setN("sip")} note="SIPs, RDs, etc." />
+            </div>
+            <Field label="Total Current Savings & Investments" type="number" prefix="₹" value={numbers.savings||""} onChange={setN("savings")} note="MFs, stocks, FDs, savings — a rough total" />
+            {(answers.home==="owned" || answers.home==="loan") &&
+              <Field label="Approx. Value of Your Home" type="number" prefix="₹" value={numbers.homeValue||""} onChange={setN("homeValue")} />}
+            {answers.home==="loan" &&
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+                <Field label="Home Loan Outstanding" type="number" prefix="₹" value={numbers.homeOutstanding||""} onChange={setN("homeOutstanding")} />
+                <Field label="Home Loan EMI / month" type="number" prefix="₹" value={numbers.homeEMI||""} onChange={setN("homeEMI")} />
+              </div>}
+            {answers.car==="loan" &&
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+                <Field label="Car Loan Outstanding" type="number" prefix="₹" value={numbers.carOutstanding||""} onChange={setN("carOutstanding")} />
+                <Field label="Car Loan EMI / month" type="number" prefix="₹" value={numbers.carEMI||""} onChange={setN("carEMI")} />
+              </div>}
+            {showGoalTarget &&
+              <Field label={goalLabels[answers.goal]} type="number" prefix="₹" value={numbers.goalTarget||""} onChange={setN("goalTarget")} note="Leave blank to use a sensible default" />}
+          </div>
+          <div style={{ display:"flex", justifyContent:"space-between", marginTop:24 }}>
+            <button onClick={()=>{ setPhase("quiz"); setStep(visible.length-1); }} className="btn-navy" style={{ padding:"12px 24px", borderRadius:12, fontSize:15 }}>← Back</button>
+            <button onClick={createPlan} className="btn-gold" style={{ padding:"14px 36px", borderRadius:14, fontSize:16, boxShadow:`0 8px 32px ${T.gold}40` }}>Create My Plan →</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 export default function App() {
   const [page, setPage] = useState("landing"); // landing | dashboard
   const [user, setUser] = useState(null);
@@ -1705,11 +2031,12 @@ export default function App() {
   return (
     <div style={{ minHeight:"100vh", background:T.cream }}>
       <GlobalCSS />
-      <Navbar user={user} isDemo={isDemo} onAuthClick={openAuth} onLogout={handleLogout} onLogoClick={()=>setPage(user||isDemo?"dashboard":"landing")} />
+      <Navbar user={user} isDemo={isDemo} onAuthClick={openAuth} onLogout={handleLogout} onLogoClick={()=>setPage(user||isDemo?"dashboard":"landing")} onGuided={()=>setPage("guided")} guidedActive={page==="guided"} />
       {isDemo && <DemoBanner onSignIn={openAuth} />}
       <AuthModal show={showAuth} onClose={()=>setShowAuth(false)} onSignIn={handleSignIn} onDemo={handleDemo} />
       {page === "landing" && <Landing onGetStarted={()=>{ if(user)setPage("dashboard"); else setShowAuth(true); }} onAuth={openAuth} />}
       {page === "dashboard" && <Dashboard user={user} isDemo={isDemo} onAuthClick={openAuth} onLogout={handleLogout} />}
+      {page === "guided" && <GuidedPlanWizard onExit={()=>setPage(user||isDemo?"dashboard":"landing")} onAuthClick={openAuth} />}
       <SiteFooter />
     </div>
   );
