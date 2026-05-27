@@ -1731,74 +1731,173 @@ const SiteFooter = () => (
 const toNum = (v) => { const x = parseFloat(v); return isNaN(x) ? 0 : x; };
 
 const GUIDED_QUESTIONS = [
-  { id:"lifeStage", q:"Where are you in life right now?", sub:"This helps us pick the right time horizon.", type:"single",
+  // ── About You ──
+  { id:"lifeStage", section:"About You", q:"Where are you in life right now?", sub:"This helps us pick the right time horizon.", type:"single",
     options:[{icon:"🌱",label:"Just starting out",value:"start"},{icon:"🚀",label:"Building my career",value:"build"},{icon:"💼",label:"Peak earning years",value:"peak"},{icon:"🏖️",label:"Near / in retirement",value:"retire"}] },
-  { id:"ageBand", q:"Which age group are you in?", sub:"A rough range is fine — you'll confirm the exact age later.", type:"single",
+  { id:"ageBand", section:"About You", q:"Which age group are you in?", sub:"A rough range is fine — you'll confirm the exact age later.", type:"single",
     options:[{icon:"🧑",label:"20s",value:25},{icon:"🧑‍💼",label:"30s",value:35},{icon:"👨‍👩‍👧",label:"40s",value:45},{icon:"🧓",label:"50s",value:55},{icon:"👴",label:"60 or above",value:65}] },
-  { id:"dependents", q:"Who depends on you financially?", sub:"Pick all that apply.", type:"multi",
+  { id:"maritalStatus", section:"About You", q:"What's your marital status?", sub:"", type:"single",
+    options:[{icon:"🧍",label:"Single",value:"single"},{icon:"💍",label:"Married",value:"married"},{icon:"💔",label:"Divorced",value:"divorced"},{icon:"🕯️",label:"Widowed",value:"widowed"}] },
+  { id:"dependents", section:"About You", q:"Who depends on you financially?", sub:"Pick all that apply.", type:"multi",
     options:[{icon:"🧍",label:"Just me",value:"self"},{icon:"💑",label:"Spouse / partner",value:"spouse"},{icon:"🧒",label:"Children",value:"kids"},{icon:"👵",label:"Parents",value:"parents"}] },
-  { id:"kids", q:"How many children do you support?", sub:"", type:"single", showIf:a=>Array.isArray(a.dependents)&&a.dependents.includes("kids"),
+  { id:"kids", section:"About You", q:"How many children do you support?", sub:"", type:"single", showIf:a=>Array.isArray(a.dependents)&&a.dependents.includes("kids"),
     options:[{icon:"1️⃣",label:"One",value:1},{icon:"2️⃣",label:"Two",value:2},{icon:"3️⃣",label:"Three or more",value:3}] },
-  { id:"home", q:"What's your home situation?", sub:"", type:"single",
-    options:[{icon:"🔑",label:"Renting",value:"rent"},{icon:"🏠",label:"Own — with a home loan",value:"loan"},{icon:"🏡",label:"Own — fully paid",value:"owned"}] },
-  { id:"car", q:"Do you own a car?", sub:"", type:"single",
-    options:[{icon:"🚌",label:"No car",value:"none"},{icon:"🚗",label:"Yes — paid off",value:"paid"},{icon:"🚙",label:"Yes — on loan",value:"loan"}] },
-  { id:"incomeStability", q:"How steady is your income?", sub:"", type:"single",
+  { id:"employment", section:"About You", q:"How do you earn your primary income?", sub:"", type:"single",
+    options:[{icon:"🏢",label:"Salaried — private",value:"private"},{icon:"🏛️",label:"Salaried — government",value:"govt"},{icon:"🎖️",label:"Defence services",value:"defence"},{icon:"💻",label:"Self-employed / freelance",value:"self"},{icon:"🏭",label:"Business owner",value:"business"},{icon:"🏖️",label:"Retired",value:"retired"}] },
+  { id:"cityTier", section:"About You", q:"Where do you live?", sub:"Cost of living varies a lot by city.", type:"single",
+    options:[{icon:"🌆",label:"Metro (Mumbai, Delhi, etc.)",value:"metro"},{icon:"🏙️",label:"Tier-2 city",value:"tier2"},{icon:"🏡",label:"Tier-3 / town",value:"tier3"}] },
+  // ── Income ──
+  { id:"incomeStability", section:"Income", q:"How steady is your income?", sub:"", type:"single",
     options:[{icon:"🏢",label:"Very steady (salaried)",value:"steady"},{icon:"📊",label:"Mostly steady",value:"mostly"},{icon:"📈",label:"Variable / business",value:"variable"},{icon:"🎲",label:"Irregular",value:"irregular"}] },
-  { id:"spending", q:"How would you describe your spending?", sub:"Be honest — there's no wrong answer.", type:"single",
+  { id:"incomeSources", section:"Income", q:"How many income sources do you have?", sub:"Salary, rent, business, freelance, etc.", type:"single",
+    options:[{icon:"1️⃣",label:"Just one",value:"one"},{icon:"2️⃣",label:"Two",value:"two"},{icon:"3️⃣",label:"Three or more",value:"threePlus"}] },
+  { id:"incomeGrowthExp", section:"Income", q:"How fast do you expect your income to grow?", sub:"", type:"single",
+    options:[{icon:"🐢",label:"Slowly (≈3%/yr)",value:"low"},{icon:"🚶",label:"Moderately (≈6%/yr)",value:"moderate"},{icon:"🏃",label:"Quickly (≈10%/yr)",value:"high"}] },
+  { id:"bonusVariable", section:"Income", q:"Do you get bonuses or variable pay?", sub:"", type:"single",
+    options:[{icon:"✅",label:"Yes, a meaningful chunk",value:"yes"},{icon:"➖",label:"A little",value:"some"},{icon:"❌",label:"No",value:"no"}] },
+  // ── Spending ──
+  { id:"trackSpending", section:"Spending", q:"How do you track your spending today?", sub:"", type:"single",
+    options:[{icon:"🤷",label:"I don't track",value:"no"},{icon:"🧠",label:"Mentally",value:"mentally"},{icon:"📊",label:"A spreadsheet",value:"spreadsheet"},{icon:"📱",label:"An app",value:"app"}] },
+  { id:"home", section:"Spending", q:"What's your home situation?", sub:"", type:"single",
+    options:[{icon:"🔑",label:"Renting",value:"rent"},{icon:"🏠",label:"Own — with a home loan",value:"loan"},{icon:"🏡",label:"Own — fully paid",value:"owned"},{icon:"👨‍👩‍👧",label:"Live with family",value:"family"}] },
+  { id:"vehicles", section:"Spending", q:"How many vehicles in your household?", sub:"", type:"single",
+    options:[{icon:"🚌",label:"None",value:"0"},{icon:"🚗",label:"One",value:"1"},{icon:"🚙",label:"Two or more",value:"2plus"}] },
+  { id:"car", section:"Spending", q:"Is any vehicle on a loan?", sub:"", type:"single", showIf:a=>a.vehicles==="1"||a.vehicles==="2plus",
+    options:[{icon:"💸",label:"Yes — on loan",value:"loan"},{icon:"✅",label:"No — paid off",value:"paid"}] },
+  { id:"eatOut", section:"Spending", q:"How often do you eat out or order in?", sub:"", type:"single",
+    options:[{icon:"🍱",label:"Rarely",value:"rarely"},{icon:"🍽️",label:"Weekly",value:"weekly"},{icon:"🍔",label:"A few times a week",value:"often"},{icon:"🛵",label:"Almost daily",value:"daily"}] },
+  { id:"subscriptionsCount", section:"Spending", q:"How many paid subscriptions do you have?", sub:"OTT, music, apps, gym, etc.", type:"single",
+    options:[{icon:"🔹",label:"0–1",value:"few"},{icon:"🔸",label:"2–4",value:"some"},{icon:"🔶",label:"5 or more",value:"many"}] },
+  { id:"supportFamily", section:"Spending", q:"Do you financially support parents or extended family?", sub:"", type:"single",
+    options:[{icon:"✅",label:"Yes, regularly",value:"yes"},{icon:"➖",label:"Occasionally",value:"sometimes"},{icon:"❌",label:"No",value:"no"}] },
+  { id:"spending", section:"Spending", q:"How would you describe your spending?", sub:"Be honest — there's no wrong answer.", type:"single",
     options:[{icon:"🐷",label:"I save a lot",value:"saver"},{icon:"🙂",label:"I save some",value:"some"},{icon:"⚖️",label:"I break even",value:"even"},{icon:"😅",label:"I tend to overspend",value:"over"}] },
-  { id:"investing", q:"Do you already invest?", sub:"", type:"single",
-    options:[{icon:"🆕",label:"Not yet",value:"none"},{icon:"🏦",label:"A little (FDs, savings)",value:"little"},{icon:"📅",label:"Yes — regular SIPs / stocks",value:"regular"},{icon:"💎",label:"Extensively",value:"lots"}] },
-  { id:"goal", q:"What's your #1 financial goal?", sub:"We'll build the plan around this.", type:"single",
+  // ── Debt ──
+  { id:"hasLoans", section:"Debt", q:"Do you currently have any loans?", sub:"", type:"single",
+    options:[{icon:"✅",label:"Yes",value:"yes"},{icon:"🎉",label:"No, I'm debt-free",value:"no"}] },
+  { id:"loans", section:"Debt", q:"Which loans do you have?", sub:"Pick all that apply.", type:"multi", showIf:a=>a.hasLoans==="yes",
+    options:[{icon:"🏠",label:"Home loan",value:"home"},{icon:"🚗",label:"Car loan",value:"car"},{icon:"💳",label:"Credit card debt",value:"cc"},{icon:"🧾",label:"Personal loan",value:"personal"},{icon:"🎓",label:"Education loan",value:"education"}] },
+  { id:"ccBehavior", section:"Debt", q:"How do you handle your credit card bill?", sub:"", type:"single",
+    options:[{icon:"✅",label:"Pay in full",value:"full"},{icon:"〽️",label:"Pay minimum / partial",value:"minimum"},{icon:"🔴",label:"Carry a balance",value:"carry"},{icon:"🚫",label:"I don't use one",value:"none"}] },
+  { id:"debtFeeling", section:"Debt", q:"How do you feel about your debt?", sub:"", type:"single",
+    options:[{icon:"😀",label:"No debt",value:"none"},{icon:"🙂",label:"Manageable",value:"manageable"},{icon:"😟",label:"A bit stressful",value:"stressful"},{icon:"😣",label:"Overwhelming",value:"overwhelming"}] },
+  { id:"debtVsInvest", section:"Debt", q:"What matters more to you right now?", sub:"", type:"single",
+    options:[{icon:"💥",label:"Clearing debt fast",value:"payDebt"},{icon:"⚖️",label:"A bit of both",value:"balance"},{icon:"📈",label:"Investing for growth",value:"invest"}] },
+  // ── Savings & Assets ──
+  { id:"emergencyFund", section:"Savings & Assets", q:"How big is your emergency fund?", sub:"Cash you could live on if income stopped.", type:"single",
+    options:[{icon:"🚫",label:"None yet",value:"none"},{icon:"🔸",label:"Under 3 months",value:"under3"},{icon:"🔹",label:"3–6 months",value:"3to6"},{icon:"🛡️",label:"6+ months",value:"6plus"}] },
+  { id:"assetTypes", section:"Savings & Assets", q:"Where is your money today?", sub:"Pick all that apply — we'll ask amounts next.", type:"multi",
+    options:[{icon:"🏦",label:"Savings account",value:"savings"},{icon:"📜",label:"Fixed deposits",value:"fd"},{icon:"📈",label:"Mutual funds",value:"mf"},{icon:"📊",label:"Direct stocks",value:"stocks"},{icon:"🏛️",label:"EPF / PPF / NPS",value:"epf"},{icon:"🪙",label:"Gold",value:"gold"},{icon:"🏠",label:"Real estate (extra)",value:"realestate"},{icon:"₿",label:"Crypto",value:"crypto"}] },
+  { id:"investingExp", section:"Savings & Assets", q:"How experienced are you with investing?", sub:"", type:"single",
+    options:[{icon:"🆕",label:"Beginner",value:"none"},{icon:"📘",label:"Some basics",value:"beginner"},{icon:"📗",label:"Fairly confident",value:"intermediate"},{icon:"📕",label:"Very experienced",value:"advanced"}] },
+  { id:"investRegular", section:"Savings & Assets", q:"Do you invest regularly?", sub:"", type:"single",
+    options:[{icon:"❌",label:"Not really",value:"no"},{icon:"➖",label:"Sometimes",value:"sometimes"},{icon:"📅",label:"Yes — monthly SIP",value:"monthly"}] },
+  { id:"retirementAccounts", section:"Savings & Assets", q:"Which retirement accounts do you have?", sub:"Pick all that apply.", type:"multi",
+    options:[{icon:"🏛️",label:"EPF",value:"epf"},{icon:"📜",label:"PPF",value:"ppf"},{icon:"📈",label:"NPS",value:"nps"},{icon:"🚫",label:"None",value:"none"}] },
+  // ── Protection ──
+  { id:"lifeInsurance", section:"Protection", q:"Do you have life insurance?", sub:"", type:"single",
+    options:[{icon:"🚫",label:"None",value:"none"},{icon:"🔸",label:"Some cover",value:"some"},{icon:"🛡️",label:"Adequate term cover",value:"adequate"},{icon:"❓",label:"Not sure",value:"unsure"}] },
+  { id:"healthInsurance", section:"Protection", q:"Do you have health insurance?", sub:"", type:"single",
+    options:[{icon:"🚫",label:"None",value:"none"},{icon:"🏢",label:"Only via employer",value:"employer"},{icon:"🧾",label:"Personal policy",value:"personal"},{icon:"✅",label:"Both",value:"both"}] },
+  { id:"willNominee", section:"Protection", q:"Have you set up a will & nominees?", sub:"", type:"single",
+    options:[{icon:"❌",label:"Not yet",value:"no"},{icon:"〽️",label:"Partially (some nominees)",value:"partial"},{icon:"✅",label:"Yes, sorted",value:"yes"}] },
+  // ── Goals ──
+  { id:"goal", section:"Goals", q:"What's your #1 financial goal?", sub:"We'll build the plan around this.", type:"single",
     options:[{icon:"🏠",label:"Buy a home",value:"home"},{icon:"🎓",label:"Kids' education",value:"education"},{icon:"🏝️",label:"Retire early",value:"retire"},{icon:"📈",label:"Build wealth",value:"wealth"},{icon:"🛟",label:"Emergency safety net",value:"emergency"},{icon:"✈️",label:"Travel / lifestyle",value:"travel"}] },
-  { id:"risk", q:"If your investments dropped 20% in a month, you'd…", sub:"This sets your risk profile.", type:"single",
-    options:[{icon:"😱",label:"Sell everything",value:"cons"},{icon:"😟",label:"Worry, maybe sell some",value:"bal-"},{icon:"😐",label:"Hold and wait it out",value:"bal"},{icon:"😎",label:"Invest more — it's a sale!",value:"agg"}] },
-  { id:"retireAge", q:"When do you want work to become optional?", sub:"Your target financial-freedom age.", type:"single",
+  { id:"goals2", section:"Goals", q:"Any other goals on your radar?", sub:"Pick all that apply (optional).", type:"multi",
+    options:[{icon:"🏠",label:"Home",value:"home"},{icon:"🎓",label:"Education",value:"education"},{icon:"🚗",label:"A car",value:"car"},{icon:"✈️",label:"Travel",value:"travel"},{icon:"🏝️",label:"Retirement",value:"retire"},{icon:"📈",label:"Wealth",value:"wealth"}] },
+  { id:"retireAge", section:"Goals", q:"When do you want work to become optional?", sub:"Your target financial-freedom age.", type:"single",
     options:[{icon:"⚡",label:"By 45",value:45},{icon:"🎯",label:"By 50",value:50},{icon:"🛠️",label:"By 55",value:55},{icon:"🌅",label:"By 60",value:60},{icon:"⏳",label:"65 or later",value:65}] },
+  { id:"legacy", section:"Goals", q:"How important is leaving a legacy / estate?", sub:"", type:"single",
+    options:[{icon:"🔹",label:"Not a priority",value:"low"},{icon:"🔸",label:"Somewhat",value:"medium"},{icon:"🏛️",label:"Very important",value:"high"}] },
+  // ── Mindset ──
+  { id:"risk", section:"Mindset", q:"If your investments dropped 20% in a month, you'd…", sub:"This sets your risk profile.", type:"single",
+    options:[{icon:"😱",label:"Sell everything",value:"cons"},{icon:"😟",label:"Worry, maybe sell some",value:"bal-"},{icon:"😐",label:"Hold and wait it out",value:"bal"},{icon:"😎",label:"Invest more — it's a sale!",value:"agg"}] },
+  { id:"horizon", section:"Mindset", q:"How long can you leave money invested?", sub:"", type:"single",
+    options:[{icon:"⏱️",label:"Under 3 years",value:"short"},{icon:"📆",label:"3–7 years",value:"medium"},{icon:"📅",label:"7+ years",value:"long"}] },
+  { id:"moneyPersona", section:"Mindset", q:"Which sounds most like you?", sub:"", type:"single",
+    options:[{icon:"🐷",label:"Saver",value:"saver"},{icon:"🛍️",label:"Spender",value:"spender"},{icon:"🙈",label:"Avoider",value:"avoider"},{icon:"🎯",label:"Optimizer",value:"optimizer"}] },
+  { id:"freedomMeaning", section:"Mindset", q:"What does financial freedom mean to you?", sub:"", type:"single",
+    options:[{icon:"🚫",label:"Being debt-free",value:"nodebt"},{icon:"💧",label:"Passive income covers expenses",value:"passive"},{icon:"🏝️",label:"Retiring early",value:"retireEarly"},{icon:"🧘",label:"Work becomes a choice",value:"optional"}] },
 ];
 
 function buildGuidedData(answers, n) {
   const base = JSON.parse(JSON.stringify(defaultData));
   const yr = new Date().getFullYear();
   const age = parseInt(n.age) || answers.ageBand || 35;
+  const has = (key, val) => Array.isArray(answers[key]) && answers[key].includes(val);
   base.name = (n.name || "").trim();
+  base.city = (n.city || "").trim();
   base.dob = `${yr - age}-01-01`;
   base.retirementAge = answers.retireAge || 55;
+  base.incomeGrowth = answers.incomeGrowthExp === "high" ? 10 : answers.incomeGrowthExp === "low" ? 3 : 6;
+
   const riskMap = { cons:["Conservative",40], "bal-":["Balanced",60], bal:["Balanced",70], agg:["Aggressive",85] };
-  const [rp, eq] = riskMap[answers.risk] || ["Balanced",70];
+  let [rp, eq] = riskMap[answers.risk] || ["Balanced",70];
+  if (answers.horizon === "short" && eq > 50) eq = 50; // shorten equity for short horizon
   base.riskProfile = rp; base.equityAlloc = eq; base.debtAlloc = 100 - eq;
-  base.salaryMonthly = toNum(n.income); base.otherIncomeMonthly = 0;
-  const exp = toNum(n.expenses);
-  const hasKids = Array.isArray(answers.dependents) && answers.dependents.includes("kids");
-  if (hasKids) { base.householdExp=Math.round(exp*0.55); base.childcareExp=Math.round(exp*0.20); base.vacationExp=Math.round(exp*0.10); base.giftsExp=Math.round(exp*0.05); base.otherExp=Math.round(exp*0.10); }
-  else { base.householdExp=Math.round(exp*0.70); base.childcareExp=0; base.vacationExp=Math.round(exp*0.12); base.giftsExp=Math.round(exp*0.06); base.otherExp=Math.round(exp*0.12); }
+
+  base.salaryMonthly = toNum(n.income); base.otherIncomeMonthly = toNum(n.otherIncome);
+
+  // Monthly expenses, grouped from detailed categories + monthly slice of irregular/annual costs
+  const mAnnual = (v) => toNum(v) / 12;
+  base.householdExp = Math.round(toNum(n.e_housing) + toNum(n.e_utilities) + toNum(n.e_groceries) + toNum(n.e_shopping));
+  base.childcareExp = Math.round(toNum(n.e_education));
+  base.vacationExp  = Math.round(toNum(n.e_dining) + mAnnual(n.a_vacation));
+  base.giftsExp     = Math.round(toNum(n.e_subscriptions) + mAnnual(n.a_festivals));
+  base.otherExp     = Math.round(toNum(n.e_transport) + toNum(n.e_health) + toNum(n.e_other) + mAnnual(n.a_insurance) + mAnnual(n.a_maintenance));
+  const totExpM = base.householdExp + base.childcareExp + base.vacationExp + base.giftsExp + base.otherExp;
+  const annualExp = totExpM * 12;
+
   base.sipMonthly = toNum(n.sip); base.pfMonthly = 0;
-  const sav = toNum(n.savings);
-  base.assets = [
-    { name:"Equity Investments", type:"Equity", value: Math.round(sav*eq/100) },
-    { name:"Debt / Savings / FD", type:"Debt", value: Math.round(sav*(100-eq)/100) },
-  ];
+
+  // Assets by class
+  base.assets = [];
+  const pushA = (name, type, v) => { if (toNum(v) > 0) base.assets.push({ name, type, value: toNum(v) }); };
+  pushA("Mutual Funds", "Equity", n.as_mf);
+  pushA("Direct Stocks", "Equity", n.as_stocks);
+  pushA("Savings Account", "Debt", n.as_savings);
+  pushA("Fixed Deposits", "Debt", n.as_fd);
+  pushA("EPF / PPF / NPS", "Debt", n.as_epf);
+  pushA("Gold", "Gold", n.as_gold);
+  pushA("Crypto", "Other", n.as_crypto);
+  if (base.assets.length === 0) base.assets.push({ name:"Savings", type:"Debt", value:0 });
+
   base.physicalAssets = [];
-  if ((answers.home==="owned" || answers.home==="loan") && toNum(n.homeValue) > 0) base.physicalAssets.push({ name:"Home", value: toNum(n.homeValue) });
+  if ((answers.home==="owned" || answers.home==="loan") && toNum(n.as_homevalue) > 0) base.physicalAssets.push({ name:"Home", value: toNum(n.as_homevalue) });
+  if (toNum(n.as_realestate) > 0) base.physicalAssets.push({ name:"Real Estate", value: toNum(n.as_realestate) });
+
+  // Liabilities
   base.liabilities = [];
-  if (answers.home==="loan" && (toNum(n.homeOutstanding)>0 || toNum(n.homeEMI)>0)) base.liabilities.push({ name:"Home Loan", emi:toNum(n.homeEMI), outstanding:toNum(n.homeOutstanding), rate:8.5 });
-  if (answers.car==="loan" && (toNum(n.carOutstanding)>0 || toNum(n.carEMI)>0)) base.liabilities.push({ name:"Car Loan", emi:toNum(n.carEMI), outstanding:toNum(n.carOutstanding), rate:9.5 });
-  const gt = toNum(n.goalTarget);
+  const pushL = (name, out, emi, rate) => { if (toNum(out)>0 || toNum(emi)>0) base.liabilities.push({ name, outstanding:toNum(out), emi:toNum(emi), rate }); };
+  const loanSel = (k) => has("loans", k) || (k==="home" && answers.home==="loan") || (k==="car" && answers.car==="loan");
+  if (loanSel("home")) pushL("Home Loan", n.l_home_out, n.l_home_emi, 8.5);
+  if (loanSel("car")) pushL("Car Loan", n.l_car_out, n.l_car_emi, 9.5);
+  if (loanSel("personal")) pushL("Personal Loan", n.l_personal_out, n.l_personal_emi, 13);
+  if (loanSel("education")) pushL("Education Loan", n.l_education_out, n.l_education_emi, 9);
+  if (loanSel("cc")) pushL("Credit Card", n.l_cc_out, n.l_cc_emi, 38);
+
+  // Insurance (stored for future use)
+  base.insurance = { lifeCover: toNum(n.ins_life), healthCover: toNum(n.ins_health) };
+
+  // Goals
   const yToRet = Math.max(base.retirementAge - age, 1);
-  const annualExp = exp * 12;
-  const goalMap = {
-    home:      { name:"Home Purchase",          year: yr+7,      val: gt||8000000,            infl:5,  pr:"High" },
-    education: { name:"Children's Education",    year: yr+15,     val: gt||3000000,            infl:10, pr:"High" },
-    retire:    { name:"Early Retirement Fund",   year: yr+yToRet, val: annualExp*15||5000000,  infl:6,  pr:"High" },
-    wealth:    { name:"Wealth Building",         year: yr+15,     val: gt||5000000,            infl:6,  pr:"Medium" },
-    emergency: { name:"Emergency Fund",          year: yr+1,      val: exp*6||300000,          infl:6,  pr:"High" },
-    travel:    { name:"Travel / Lifestyle",      year: yr+3,      val: gt||500000,             infl:6,  pr:"Low" },
+  const hasKids = Array.isArray(answers.dependents) && answers.dependents.includes("kids");
+  const goalDefs = {
+    home:      () => ({ name:"Home Purchase",       year: yr+7,      currentValue: toNum(n.g_home)||8000000,       inflation:5,  priority:"High" }),
+    education: () => ({ name:"Children's Education", year: yr+15,     currentValue: toNum(n.g_education)||(3000000*(answers.kids||1)), inflation:10, priority:"High" }),
+    retire:    () => ({ name:"Early Retirement Fund",year: yr+yToRet, currentValue: annualExp*15||5000000,          inflation:6,  priority:"High" }),
+    wealth:    () => ({ name:"Wealth Building",      year: yr+15,     currentValue: 5000000,                          inflation:6,  priority:"Medium" }),
+    emergency: () => ({ name:"Emergency Fund",       year: yr+1,      currentValue: totExpM*6||300000,                inflation:6,  priority:"High" }),
+    travel:    () => ({ name:"Travel / Lifestyle",   year: yr+3,      currentValue: toNum(n.g_travel)||500000,        inflation:6,  priority:"Low" }),
+    car:       () => ({ name:"Car Purchase",         year: yr+4,      currentValue: toNum(n.g_car)||1000000,          inflation:6,  priority:"Medium" }),
   };
+  const chosen = new Set([answers.goal, ...(Array.isArray(answers.goals2)?answers.goals2:[])].filter(Boolean));
+  if (hasKids) chosen.add("education");
   const goals = [];
-  const p = goalMap[answers.goal] || goalMap.wealth;
-  goals.push({ name:p.name, year:p.year, currentValue:p.val, inflation:p.infl, priority:p.pr });
-  if (hasKids && answers.goal !== "education") goals.push({ name:"Children's Education", year: yr+15, currentValue: 3000000*(answers.kids||1), inflation:10, priority:"High" });
-  if (answers.goal !== "retire") goals.push({ name:"Retirement Corpus", year: yr+yToRet, currentValue: annualExp*12||5000000, inflation:6, priority:"High" });
+  if (answers.goal && goalDefs[answers.goal]) { const g = goalDefs[answers.goal](); g.priority = "High"; goals.push(g); chosen.delete(answers.goal); }
+  chosen.forEach(k => { if (goalDefs[k]) goals.push(goalDefs[k]()); });
+  if (![...chosen, answers.goal].includes("retire")) goals.push({ name:"Retirement Corpus", year: yr+yToRet, currentValue: annualExp*12||5000000, inflation:6, priority:"High" });
   base.goals = goals;
   return base;
 }
@@ -1849,6 +1948,200 @@ const GuidedBudgetCard = ({ data }) => {
   );
 };
 
+// ── Cluster 2: Zero-based budget ("give every rupee a job") + true expenses ──
+const BUDGET_GROUPS = [
+  { id:"essentials", label:"Essentials", color:T.navy, items:[["housing","🏠 Housing / Rent"],["utilities","💡 Utilities"],["groceries","🛒 Groceries"],["transport","🚗 Transport"],["health","🏥 Health"]] },
+  { id:"lifestyle", label:"Lifestyle", color:T.teal, items:[["dining","🍽️ Dining & fun"],["shopping","🛍️ Shopping"],["subscriptions","📺 Subscriptions"],["education","🎓 Childcare / school"],["other","➕ Other"]] },
+  { id:"true", label:"True Expenses — monthly set-aside for big yearly bills", color:T.amber, items:[["insurance","🛡️ Insurance"],["festivals","🎁 Festivals & gifts"],["vacation","✈️ Vacation fund"],["maintenance","🔧 Maintenance"]] },
+];
+const ZeroBudget = ({ data, n }) => {
+  const income = data.salaryMonthly + data.otherIncomeMonthly;
+  const init = {
+    housing:toNum(n.e_housing), utilities:toNum(n.e_utilities), groceries:toNum(n.e_groceries), transport:toNum(n.e_transport), health:toNum(n.e_health),
+    dining:toNum(n.e_dining), shopping:toNum(n.e_shopping), subscriptions:toNum(n.e_subscriptions), education:toNum(n.e_education), other:toNum(n.e_other),
+    insurance:Math.round(toNum(n.a_insurance)/12), festivals:Math.round(toNum(n.a_festivals)/12), vacation:Math.round(toNum(n.a_vacation)/12), maintenance:Math.round(toNum(n.a_maintenance)/12),
+  };
+  const [amts, setAmts] = useState(init);
+  const set = (k) => (e) => setAmts(p => ({ ...p, [k]: e.target.value }));
+  const emis = data.liabilities.reduce((s,l)=>s+(l.emi||0),0);
+  const sip = data.sipMonthly + data.pfMonthly;
+  const assigned = Object.values(amts).reduce((s,v)=>s+toNum(v),0) + emis + sip;
+  const toAssign = income - assigned;
+  const inputStyle = { width:90, padding:"6px 8px", border:`1.5px solid ${T.silver}50`, borderRadius:8, fontSize:13, textAlign:"right", color:T.navy, fontFamily:BODY };
+  const banner = toAssign === 0
+    ? { bg:`${T.emerald}12`, c:T.emerald, txt:"🎉 Every rupee has a job — your budget is balanced!" }
+    : toAssign > 0
+      ? { bg:`${T.gold}12`, c:T.goldDim, txt:`${fmt(toAssign)} still to assign — give it a job (more savings, a goal, or paying down debt).` }
+      : { bg:`${T.ruby}10`, c:T.ruby, txt:`Over-assigned by ${fmt(-toAssign)} — trim a category or you'll dip into savings.` };
+  return (
+    <div>
+      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:10, marginBottom:10 }}>
+        <div><h3 style={{ fontFamily:DISPLAY, fontSize:24, fontWeight:700, color:T.navy }}>Monthly Budget</h3>
+        <p style={{ fontSize:13, color:T.steel }}>YNAB rule #1: give every one of your {fmt(income)} a job.</p></div>
+        <div style={{ textAlign:"right" }}>
+          <div style={{ fontSize:11, color:T.steel, textTransform:"uppercase", fontWeight:600 }}>To Assign</div>
+          <div style={{ fontSize:26, fontWeight:800, fontFamily:DISPLAY, color: toAssign===0?T.emerald:toAssign>0?T.goldDim:T.ruby }}>{fmt(toAssign)}</div>
+        </div>
+      </div>
+      <div style={{ padding:"12px 16px", borderRadius:12, background:banner.bg, color:banner.c, fontSize:14, fontWeight:600, marginBottom:18 }}>{banner.txt}</div>
+      {BUDGET_GROUPS.map(g => {
+        const sub = g.items.reduce((s,[k])=>s+toNum(amts[k]),0);
+        return (
+          <div key={g.id} style={{ background:T.white, borderRadius:14, padding:18, boxShadow:"0 2px 12px rgba(0,0,0,0.04)", marginBottom:12, borderLeft:`4px solid ${g.color}` }}>
+            <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
+              <span style={{ fontWeight:700, color:g.color, fontSize:14 }}>{g.label}</span>
+              <span style={{ fontWeight:700, color:T.navy, fontSize:14 }}>{fmt(sub)}</span>
+            </div>
+            {g.items.map(([k,lbl]) => (
+              <div key={k} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px 0", fontSize:14, color:T.slate }}>
+                <span>{lbl}</span>
+                <span style={{ position:"relative" }}><span style={{ position:"absolute", left:8, top:"50%", transform:"translateY(-50%)", color:T.steel, fontSize:12 }}>₹</span><input type="number" value={amts[k]||""} onChange={set(k)} style={{ ...inputStyle, paddingLeft:18 }} /></span>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+      <div style={{ background:T.white, borderRadius:14, padding:18, boxShadow:"0 2px 12px rgba(0,0,0,0.04)", borderLeft:`4px solid ${T.emerald}` }}>
+        <div style={{ display:"flex", justifyContent:"space-between", padding:"5px 0", fontSize:14, color:T.slate }}><span>💸 Loan EMIs (fixed)</span><span style={{ fontWeight:700, color:T.navy }}>{fmt(emis)}</span></div>
+        <div style={{ display:"flex", justifyContent:"space-between", padding:"5px 0", fontSize:14, color:T.slate }}><span>📈 Investing (SIP / RD)</span><span style={{ fontWeight:700, color:T.emerald }}>{fmt(sip)}</span></div>
+      </div>
+      <p style={{ fontSize:12, color:T.steel, marginTop:12, lineHeight:1.6 }}>💡 <strong>True Expenses:</strong> big yearly bills (insurance, festivals, vacations, repairs) are divided into monthly set-asides so they never blindside you — that's YNAB rule #2.</p>
+    </div>
+  );
+};
+
+// ── Cluster 3: Debt payoff calculator (snowball / avalanche) ──
+function simulateDebt(liabs, extra, strategy) {
+  let L = liabs.filter(l=>(l.outstanding||0)>0).map(l=>({ bal:l.outstanding, r:(l.rate||0)/100/12, emi:l.emi||0 }));
+  if (!L.length) return { months:0, interest:0 };
+  let months=0, interest=0;
+  while (L.some(l=>l.bal>0.5) && months<1200) {
+    months++;
+    let freed=0;
+    L.forEach(l => {
+      if (l.bal<=0) { freed+=l.emi; return; }
+      const i = l.bal*l.r; interest+=i;
+      const pay = Math.min(l.emi, l.bal+i);
+      l.bal = l.bal+i-pay; if (l.bal<0) l.bal=0;
+    });
+    let extraLeft = extra + freed;
+    const order = L.filter(l=>l.bal>0).sort((a,b)=> strategy==="avalanche" ? b.r-a.r : a.bal-b.bal);
+    for (const l of order) { if (extraLeft<=0) break; const pay=Math.min(extraLeft,l.bal); l.bal-=pay; extraLeft-=pay; }
+  }
+  return { months, interest:Math.round(interest) };
+}
+const DebtPayoff = ({ data }) => {
+  const [extra, setExtra] = useState(5000);
+  const [strategy, setStrategy] = useState("avalanche");
+  const loans = data.liabilities.filter(l=>(l.outstanding||0)>0);
+  if (!loans.length) return (
+    <div style={{ background:T.white, borderRadius:16, padding:32, textAlign:"center", boxShadow:"0 2px 16px rgba(0,0,0,0.04)" }}>
+      <div style={{ fontSize:40 }}>🎉</div>
+      <h3 style={{ fontFamily:DISPLAY, fontSize:24, fontWeight:700, color:T.emerald, marginTop:8 }}>You're debt-free!</h3>
+      <p style={{ color:T.slate, marginTop:6 }}>Nothing to pay down — channel that freedom into investing for your goals.</p>
+    </div>
+  );
+  const base = simulateDebt(loans, 0, strategy);
+  const withExtra = simulateDebt(loans, toNum(extra), strategy);
+  const interestSaved = Math.max(base.interest - withExtra.interest, 0);
+  const monthsSaved = Math.max(base.months - withExtra.months, 0);
+  const ym = (m) => `${Math.floor(m/12)}y ${m%12}m`;
+  return (
+    <div>
+      <h3 style={{ fontFamily:DISPLAY, fontSize:24, fontWeight:700, color:T.navy }}>Debt Payoff Planner</h3>
+      <p style={{ fontSize:13, color:T.steel, marginBottom:16 }}>See how much faster — and cheaper — you clear debt by paying a little extra each month.</p>
+      <div style={{ background:T.white, borderRadius:14, padding:18, boxShadow:"0 2px 12px rgba(0,0,0,0.04)", marginBottom:14 }}>
+        <div style={{ fontWeight:700, color:T.navy, marginBottom:10, fontSize:14 }}>Your loans</div>
+        {loans.map((l,i)=>(
+          <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"6px 0", fontSize:14, color:T.slate, borderBottom:i<loans.length-1?`1px solid ${T.silver}25`:"none" }}>
+            <span>{l.name} <span style={{ color:T.steel, fontSize:12 }}>· {l.rate}% · EMI {fmt(l.emi)}</span></span>
+            <span style={{ fontWeight:700, color:T.navy }}>{fmt(l.outstanding)}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display:"flex", gap:10, flexWrap:"wrap", alignItems:"center", marginBottom:16 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:T.slate }}>Strategy:</span>
+        {[["avalanche","Avalanche (save most interest)"],["snowball","Snowball (quick wins)"]].map(([v,lbl])=>(
+          <button key={v} onClick={()=>setStrategy(v)} style={{ padding:"7px 14px", borderRadius:9, fontSize:13, fontWeight:600, cursor:"pointer", border:`1.5px solid ${strategy===v?T.gold:T.silver+"40"}`, background:strategy===v?`${T.gold}12`:T.white, color:T.navy }}>{lbl}</button>
+        ))}
+      </div>
+      <div style={{ background:T.white, borderRadius:14, padding:18, boxShadow:"0 2px 12px rgba(0,0,0,0.04)", marginBottom:16 }}>
+        <label style={{ fontSize:13, fontWeight:600, color:T.slate }}>Extra payment per month</label>
+        <div style={{ display:"flex", alignItems:"center", gap:14, marginTop:8 }}>
+          <input type="range" min="0" max="50000" step="1000" value={toNum(extra)} onChange={e=>setExtra(e.target.value)} style={{ flex:1, accentColor:T.gold }} />
+          <div style={{ position:"relative" }}><span style={{ position:"absolute", left:10, top:"50%", transform:"translateY(-50%)", color:T.steel }}>₹</span><input type="number" value={extra} onChange={e=>setExtra(e.target.value)} style={{ width:110, padding:"8px 8px 8px 22px", border:`1.5px solid ${T.silver}50`, borderRadius:8, fontSize:14, color:T.navy }} /></div>
+        </div>
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))", gap:12 }}>
+        <MetricCard icon="📅" label="Debt-free in" value={ym(withExtra.months)} sub={`was ${ym(base.months)}`} color={T.teal} />
+        <MetricCard icon="⏱️" label="Time saved" value={ym(monthsSaved)} sub="vs minimums only" color={T.emerald} />
+        <MetricCard icon="💸" label="Interest saved" value={fmt(interestSaved)} sub={`total interest ${fmt(withExtra.interest)}`} color={T.gold} />
+      </div>
+      <p style={{ fontSize:12, color:T.steel, marginTop:14, lineHeight:1.6 }}>Educational estimate based on the balances, rates and EMIs you entered. As each loan clears, its EMI rolls into the next ("rollover"). Confirm exact figures with your lender.</p>
+    </div>
+  );
+};
+
+// ── Cluster 4: Reports — spending, net-worth trend, Age of Money ──
+const GuidedReports = ({ data }) => {
+  const income = data.salaryMonthly + data.otherIncomeMonthly;
+  const totExpM = data.householdExp + data.childcareExp + data.vacationExp + data.giftsExp + data.otherExp;
+  const savM = income - totExpM;
+  const portR = (data.equityAlloc/100)*(data.equityReturn/100) + (data.debtAlloc/100)*(data.debtReturn/100);
+  const totFA = data.assets.reduce((s,a)=>s+a.value,0);
+  const totPA = data.physicalAssets.reduce((s,a)=>s+a.value,0);
+  let liab = data.liabilities.reduce((s,l)=>s+(l.outstanding||0),0);
+  const emis = data.liabilities.reduce((s,l)=>s+(l.emi||0),0)*12;
+  const spend = [
+    { name:"Essentials", value:data.householdExp+data.childcareExp },
+    { name:"Lifestyle", value:data.vacationExp+data.giftsExp },
+    { name:"Other", value:data.otherExp },
+  ].filter(s=>s.value>0);
+  const yr0 = new Date().getFullYear();
+  let fa=totFA, pa=totPA, lb=liab;
+  const trend = [];
+  for (let y=0; y<=10; y++) {
+    trend.push({ year: yr0+y, networth: Math.round(fa+pa-lb) });
+    fa = fa*(1+portR) + savM*12; pa = pa*(1+data.realEstateReturn/100); lb = Math.max(lb-emis,0);
+  }
+  const liquid = data.assets.filter(a=>a.type==="Debt").reduce((s,a)=>s+a.value,0);
+  const ageOfMoney = totExpM>0 ? Math.round(liquid/totExpM*30) : 0;
+  return (
+    <div>
+      <h3 style={{ fontFamily:DISPLAY, fontSize:24, fontWeight:700, color:T.navy }}>Reports</h3>
+      <p style={{ fontSize:13, color:T.steel, marginBottom:16 }}>The fun part — watch your money work.</p>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))", gap:12, marginBottom:16 }}>
+        <MetricCard icon="⏳" label="Age of Money" value={`${ageOfMoney} days`} sub="how long your cash would last" color={T.teal} />
+        <MetricCard icon="💰" label="Net Worth Today" value={fmt(totFA+totPA-liab)} color={T.gold} />
+        <MetricCard icon="📈" label="Net Worth in 10y" value={fmt(trend[trend.length-1].networth)} sub="projected" color={T.emerald} />
+      </div>
+      <div style={{ background:T.white, borderRadius:16, padding:24, boxShadow:"0 2px 16px rgba(0,0,0,0.04)", marginBottom:16 }}>
+        <div style={{ fontWeight:700, color:T.navy, marginBottom:12 }}>Projected net worth</div>
+        <ResponsiveContainer width="100%" height={240}>
+          <AreaChart data={trend}>
+            <CartesianGrid strokeDasharray="3 3" stroke={`${T.silver}40`} />
+            <XAxis dataKey="year" tick={{fontFamily:BODY,fontSize:12}} />
+            <YAxis tickFormatter={v=>fmt(v)} tick={{fontFamily:BODY,fontSize:11}} width={70} />
+            <Tooltip formatter={v=>fmt(v)} />
+            <Area type="monotone" dataKey="networth" stroke={T.gold} strokeWidth={2} fill={`${T.gold}22`} name="Net worth" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+      {spend.length>0 && (
+        <div style={{ background:T.white, borderRadius:16, padding:24, boxShadow:"0 2px 16px rgba(0,0,0,0.04)" }}>
+          <div style={{ fontWeight:700, color:T.navy, marginBottom:12 }}>Where your money goes</div>
+          <ResponsiveContainer width="100%" height={220}>
+            <PieChart><Pie data={spend} cx="50%" cy="50%" innerRadius={45} outerRadius={85} dataKey="value" label={({name,percent})=>`${name} ${(percent*100).toFixed(0)}%`}>
+              {spend.map((_,i)=><Cell key={i} fill={T.chart[i%T.chart.length]} />)}
+            </Pie><Tooltip formatter={v=>fmt(v)} /></PieChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+      <p style={{ fontSize:12, color:T.steel, marginTop:14, lineHeight:1.6 }}>“Age of Money” estimates how many days your liquid savings could cover expenses — higher is healthier (YNAB rule #4). Net-worth projection assumes a {(portR*100).toFixed(1)}% return and your current savings rate. Educational only.</p>
+    </div>
+  );
+};
+
 const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
   const [phase, setPhase] = useState("quiz");   // quiz | numbers | report
   const [step, setStep] = useState(0);
@@ -1856,6 +2149,7 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
   const [numbers, setNumbers] = useState({});
   const [data, setData] = useState(null);
   const [showProModal, setShowProModal] = useState(false);
+  const [resultTab, setResultTab] = useState("budget");
 
   const visible = GUIDED_QUESTIONS.filter(q => !q.showIf || q.showIf(answers));
   const idx = Math.min(step, visible.length - 1);
@@ -1879,18 +2173,31 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
   const goalLabels = { home:"Approx. cost of the home today", education:"Total education cost today", travel:"Budget for this goal today" };
   const showGoalTarget = ["home","education","travel"].includes(answers.goal);
 
-  // ── REPORT ──────────────────────────────────────────
+  // ── RESULT (tabbed: Budget · Plan · Debt · Reports) ──
   if (phase === "report" && data) {
+    const TABS = [["budget","💸 Budget"],["plan","📊 Plan"],["debt","💳 Debt"],["reports","📈 Reports"]];
     return (
       <div>
-        <div className="no-print" style={{ maxWidth:920, margin:"0 auto", padding:"16px 16px 0", display:"flex", gap:10 }}>
-          <button onClick={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} style={{ padding:"8px 16px", borderRadius:10, fontSize:13, fontWeight:600, background:`${T.navy}08`, border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>← Edit answers</button>
-          <button onClick={onExit} style={{ padding:"8px 16px", borderRadius:10, fontSize:13, fontWeight:600, background:"transparent", border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>✕ Exit Guided Plan</button>
+        <div className="no-print" style={{ maxWidth:920, margin:"0 auto", padding:"16px 16px 0", display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
+          <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
+            {TABS.map(([id,lbl])=>(
+              <button key={id} onClick={()=>{ setResultTab(id); window.scrollTo({top:0}); }} style={{ padding:"8px 16px", borderRadius:10, fontSize:13, fontWeight:700, cursor:"pointer", border:`1.5px solid ${resultTab===id?T.gold:T.silver+"40"}`, background: resultTab===id?`linear-gradient(135deg, ${T.gold}, ${T.goldLight})`:T.white, color:T.navy }}>{lbl}</button>
+            ))}
+          </div>
+          <div style={{ display:"flex", gap:8 }}>
+            <button onClick={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} style={{ padding:"8px 14px", borderRadius:10, fontSize:13, fontWeight:600, background:`${T.navy}08`, border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>← Edit</button>
+            <button onClick={onExit} style={{ padding:"8px 14px", borderRadius:10, fontSize:13, fontWeight:600, background:"transparent", border:`1px solid ${T.silver}40`, color:T.slate, cursor:"pointer" }}>✕ Exit</button>
+          </div>
         </div>
-        <div style={{ maxWidth:920, margin:"0 auto", padding:"0 16px" }}>
-          <GuidedBudgetCard data={data} />
-        </div>
-        <ReportView data={data} getAge={getAge} onBack={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} aiAnalysis={null} aiLoading={false} onRequestAI={()=> onAuthClick ? onAuthClick() : null} showProModal={showProModal} setShowProModal={setShowProModal} />
+        {resultTab === "plan" ? (
+          <ReportView data={data} getAge={getAge} onBack={()=>{ setPhase("numbers"); window.scrollTo({top:0}); }} aiAnalysis={null} aiLoading={false} onRequestAI={()=> onAuthClick ? onAuthClick() : null} showProModal={showProModal} setShowProModal={setShowProModal} />
+        ) : (
+          <div style={{ maxWidth:920, margin:"0 auto", padding:"20px 16px 60px" }}>
+            {resultTab === "budget" && <ZeroBudget data={data} n={numbers} />}
+            {resultTab === "debt" && <DebtPayoff data={data} />}
+            {resultTab === "reports" && <GuidedReports data={data} />}
+          </div>
+        )}
       </div>
     );
   }
@@ -1908,12 +2215,15 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
           <div style={{ height:6, borderRadius:3, background:`${T.silver}30`, marginBottom:10 }}>
             <div style={{ height:"100%", borderRadius:3, width:`${(idx/(visible.length))*100}%`, background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})`, transition:"width .4s" }} />
           </div>
-          <div style={{ fontSize:12, color:T.steel, marginBottom:14 }}>Question {idx+1} of {visible.length}</div>
+          <div style={{ display:"flex", justifyContent:"space-between", marginBottom:14, fontSize:12 }}>
+            <span style={{ fontWeight:700, color:T.gold, letterSpacing:"0.04em", textTransform:"uppercase" }}>{q.section}</span>
+            <span style={{ color:T.steel }}>Question {idx+1} of {visible.length}</span>
+          </div>
           <h2 style={{ fontFamily:DISPLAY, fontSize:"clamp(24px,4vw,30px)", fontWeight:700, color:T.navy, lineHeight:1.2 }}>{q.q}</h2>
           {q.sub && <p style={{ color:T.slate, fontSize:15, marginTop:8 }}>{q.sub}</p>}
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:12, marginTop:24 }}>
             {q.options.map(o => (
-              <button key={String(o.value)} onClick={()=> q.type==="multi" ? toggle(o.value) : pick(o.value)}
+              <button key={String(o.value)} className="g-opt" onClick={()=> q.type==="multi" ? toggle(o.value) : pick(o.value)}
                 style={{ display:"flex", alignItems:"center", gap:12, padding:"16px 18px", borderRadius:14, textAlign:"left", cursor:"pointer",
                   border:`2px solid ${isSel(o.value)?T.gold:`${T.silver}40`}`, background:isSel(o.value)?`${T.gold}10`:T.white,
                   fontFamily:BODY, fontSize:15, fontWeight:600, color:T.navy, transition:"all .2s", boxShadow: isSel(o.value)?`0 4px 16px ${T.gold}20`:"0 1px 4px rgba(0,0,0,0.04)" }}>
@@ -1930,45 +2240,121 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
         </>
       )}
 
-      {phase === "numbers" && (
+      {phase === "numbers" && (() => {
+        const hasA = (k) => Array.isArray(answers.assetTypes) && answers.assetTypes.includes(k);
+        const hasL = (k) => (Array.isArray(answers.loans) && answers.loans.includes(k)) || (k==="home"&&answers.home==="loan") || (k==="car"&&answers.car==="loan");
+        const wantsGoal = (k) => answers.goal===k || (Array.isArray(answers.goals2)&&answers.goals2.includes(k));
+        const hasKids = Array.isArray(answers.dependents) && answers.dependents.includes("kids");
+        const Card = ({ icon, title, hint, children }) => (
+          <div style={{ background:T.white, borderRadius:16, padding:24, boxShadow:"0 2px 16px rgba(10,22,40,0.05)", border:`1px solid ${T.gold}10`, marginBottom:16 }}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:hint?2:14 }}>
+              <span style={{ fontSize:20 }}>{icon}</span>
+              <h3 style={{ fontFamily:DISPLAY, fontSize:19, fontWeight:700, color:T.navy }}>{title}</h3>
+            </div>
+            {hint && <p style={{ fontSize:12.5, color:T.steel, marginBottom:14 }}>{hint}</p>}
+            {children}
+          </div>
+        );
+        const G2 = ({ children }) => <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>{children}</div>;
+        return (
         <>
           <div style={{ height:6, borderRadius:3, background:`${T.silver}30`, marginBottom:14 }}>
-            <div style={{ height:"100%", borderRadius:3, width:"95%", background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})` }} />
+            <div style={{ height:"100%", borderRadius:3, width:"92%", background:`linear-gradient(90deg, ${T.gold}, ${T.goldLight})` }} />
           </div>
-          <h2 style={{ fontFamily:DISPLAY, fontSize:"clamp(24px,4vw,30px)", fontWeight:700, color:T.navy, lineHeight:1.2 }}>A few numbers to finish</h2>
-          <p style={{ color:T.slate, fontSize:15, marginTop:8 }}>Approximate is fine — you can fine-tune later in the Detailed Planner.</p>
-          <div style={{ background:T.white, borderRadius:18, padding:28, boxShadow:"0 4px 32px rgba(10,22,40,0.06)", border:`1px solid ${T.gold}10`, marginTop:18 }}>
+          <h2 style={{ fontFamily:DISPLAY, fontSize:"clamp(24px,4vw,30px)", fontWeight:700, color:T.navy, lineHeight:1.2 }}>Now, the numbers</h2>
+          <p style={{ color:T.slate, fontSize:15, marginTop:8, marginBottom:20 }}>Fill in what you can — leave the rest blank. We only ask about what you told us you have.</p>
+
+          <Card icon="🪪" title="About you">
             <Field label="Your Name (optional)" value={numbers.name||""} onChange={setN("name")} placeholder="e.g. Rajesh Kumar" />
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+            <G2>
               <Field label="Your Age" type="number" value={numbers.age ?? (answers.ageBand||"")} onChange={setN("age")} />
-              <Field label="Monthly Take-home Income" type="number" prefix="₹" value={numbers.income||""} onChange={setN("income")} />
-            </div>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-              <Field label="Monthly Expenses" type="number" prefix="₹" value={numbers.expenses||""} onChange={setN("expenses")} />
-              <Field label="Monthly Amount You Invest" type="number" prefix="₹" value={numbers.sip||""} onChange={setN("sip")} note="SIPs, RDs, etc." />
-            </div>
-            <Field label="Total Current Savings & Investments" type="number" prefix="₹" value={numbers.savings||""} onChange={setN("savings")} note="MFs, stocks, FDs, savings — a rough total" />
-            {(answers.home==="owned" || answers.home==="loan") &&
-              <Field label="Approx. Value of Your Home" type="number" prefix="₹" value={numbers.homeValue||""} onChange={setN("homeValue")} />}
-            {answers.home==="loan" &&
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                <Field label="Home Loan Outstanding" type="number" prefix="₹" value={numbers.homeOutstanding||""} onChange={setN("homeOutstanding")} />
-                <Field label="Home Loan EMI / month" type="number" prefix="₹" value={numbers.homeEMI||""} onChange={setN("homeEMI")} />
-              </div>}
-            {answers.car==="loan" &&
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                <Field label="Car Loan Outstanding" type="number" prefix="₹" value={numbers.carOutstanding||""} onChange={setN("carOutstanding")} />
-                <Field label="Car Loan EMI / month" type="number" prefix="₹" value={numbers.carEMI||""} onChange={setN("carEMI")} />
-              </div>}
-            {showGoalTarget &&
-              <Field label={goalLabels[answers.goal]} type="number" prefix="₹" value={numbers.goalTarget||""} onChange={setN("goalTarget")} note="Leave blank to use a sensible default" />}
-          </div>
-          <div style={{ display:"flex", justifyContent:"space-between", marginTop:24 }}>
+              <Field label="City (optional)" value={numbers.city||""} onChange={setN("city")} placeholder="e.g. Pune" />
+            </G2>
+          </Card>
+
+          <Card icon="📈" title="Monthly income" hint="Your take-home (in-hand) amounts per month.">
+            <G2>
+              <Field label="Take-home Salary" type="number" prefix="₹" value={numbers.income||""} onChange={setN("income")} />
+              <Field label="Other Income" type="number" prefix="₹" value={numbers.otherIncome||""} onChange={setN("otherIncome")} note="Rent, freelance, etc." />
+            </G2>
+          </Card>
+
+          <Card icon="🧾" title="Monthly expenses" hint="Roughly what you spend each month, by category.">
+            <G2>
+              <Field label={answers.home==="rent"?"Rent":"Housing / upkeep"} type="number" prefix="₹" value={numbers.e_housing||""} onChange={setN("e_housing")} />
+              <Field label="Utilities & bills" type="number" prefix="₹" value={numbers.e_utilities||""} onChange={setN("e_utilities")} />
+              <Field label="Groceries" type="number" prefix="₹" value={numbers.e_groceries||""} onChange={setN("e_groceries")} />
+              <Field label="Transport / fuel" type="number" prefix="₹" value={numbers.e_transport||""} onChange={setN("e_transport")} />
+              <Field label="Dining & entertainment" type="number" prefix="₹" value={numbers.e_dining||""} onChange={setN("e_dining")} />
+              {hasKids && <Field label="Childcare / school" type="number" prefix="₹" value={numbers.e_education||""} onChange={setN("e_education")} />}
+              <Field label="Health / medical" type="number" prefix="₹" value={numbers.e_health||""} onChange={setN("e_health")} />
+              <Field label="Shopping / personal" type="number" prefix="₹" value={numbers.e_shopping||""} onChange={setN("e_shopping")} />
+              <Field label="Subscriptions" type="number" prefix="₹" value={numbers.e_subscriptions||""} onChange={setN("e_subscriptions")} />
+              <Field label="Anything else" type="number" prefix="₹" value={numbers.e_other||""} onChange={setN("e_other")} />
+            </G2>
+          </Card>
+
+          <Card icon="🗓️" title="Irregular & annual costs (optional)" hint="Big bills that hit once or twice a year — we'll spread them across the months.">
+            <G2>
+              <Field label="Insurance premiums / yr" type="number" prefix="₹" value={numbers.a_insurance||""} onChange={setN("a_insurance")} />
+              <Field label="Festivals & gifts / yr" type="number" prefix="₹" value={numbers.a_festivals||""} onChange={setN("a_festivals")} />
+              <Field label="Vacations / yr" type="number" prefix="₹" value={numbers.a_vacation||""} onChange={setN("a_vacation")} />
+              <Field label="Maintenance & repairs / yr" type="number" prefix="₹" value={numbers.a_maintenance||""} onChange={setN("a_maintenance")} />
+            </G2>
+          </Card>
+
+          <Card icon="💰" title="Savings & investments" hint="Current value of what you own.">
+            <Field label="Monthly amount you invest (SIP/RD)" type="number" prefix="₹" value={numbers.sip||""} onChange={setN("sip")} />
+            <G2>
+              {hasA("savings") && <Field label="Savings account" type="number" prefix="₹" value={numbers.as_savings||""} onChange={setN("as_savings")} />}
+              {hasA("fd") && <Field label="Fixed deposits" type="number" prefix="₹" value={numbers.as_fd||""} onChange={setN("as_fd")} />}
+              {hasA("mf") && <Field label="Mutual funds" type="number" prefix="₹" value={numbers.as_mf||""} onChange={setN("as_mf")} />}
+              {hasA("stocks") && <Field label="Direct stocks" type="number" prefix="₹" value={numbers.as_stocks||""} onChange={setN("as_stocks")} />}
+              {hasA("epf") && <Field label="EPF / PPF / NPS" type="number" prefix="₹" value={numbers.as_epf||""} onChange={setN("as_epf")} />}
+              {hasA("gold") && <Field label="Gold" type="number" prefix="₹" value={numbers.as_gold||""} onChange={setN("as_gold")} />}
+              {hasA("crypto") && <Field label="Crypto" type="number" prefix="₹" value={numbers.as_crypto||""} onChange={setN("as_crypto")} />}
+              {hasA("realestate") && <Field label="Real estate (extra)" type="number" prefix="₹" value={numbers.as_realestate||""} onChange={setN("as_realestate")} />}
+              {(answers.home==="owned"||answers.home==="loan") && <Field label="Value of your home" type="number" prefix="₹" value={numbers.as_homevalue||""} onChange={setN("as_homevalue")} />}
+            </G2>
+            {(!hasA("savings")&&!hasA("fd")&&!hasA("mf")&&!hasA("stocks")&&!hasA("epf")&&!hasA("gold")&&!hasA("crypto")&&!hasA("realestate")) &&
+              <p style={{ fontSize:12.5, color:T.steel, fontStyle:"italic" }}>You didn't select any asset types earlier — that's fine, we'll plan from your savings rate.</p>}
+          </Card>
+
+          {answers.hasLoans==="yes" && (
+            <Card icon="💳" title="Loans & liabilities" hint="Outstanding balance and the EMI you pay each month.">
+              {hasL("home") && <><div style={{ fontSize:12, fontWeight:700, color:T.slate, marginBottom:4 }}>🏠 Home loan</div><G2><Field label="Outstanding" type="number" prefix="₹" value={numbers.l_home_out||""} onChange={setN("l_home_out")} /><Field label="EMI / month" type="number" prefix="₹" value={numbers.l_home_emi||""} onChange={setN("l_home_emi")} /></G2></>}
+              {hasL("car") && <><div style={{ fontSize:12, fontWeight:700, color:T.slate, marginBottom:4 }}>🚗 Car loan</div><G2><Field label="Outstanding" type="number" prefix="₹" value={numbers.l_car_out||""} onChange={setN("l_car_out")} /><Field label="EMI / month" type="number" prefix="₹" value={numbers.l_car_emi||""} onChange={setN("l_car_emi")} /></G2></>}
+              {hasL("personal") && <><div style={{ fontSize:12, fontWeight:700, color:T.slate, marginBottom:4 }}>🧾 Personal loan</div><G2><Field label="Outstanding" type="number" prefix="₹" value={numbers.l_personal_out||""} onChange={setN("l_personal_out")} /><Field label="EMI / month" type="number" prefix="₹" value={numbers.l_personal_emi||""} onChange={setN("l_personal_emi")} /></G2></>}
+              {hasL("education") && <><div style={{ fontSize:12, fontWeight:700, color:T.slate, marginBottom:4 }}>🎓 Education loan</div><G2><Field label="Outstanding" type="number" prefix="₹" value={numbers.l_education_out||""} onChange={setN("l_education_out")} /><Field label="EMI / month" type="number" prefix="₹" value={numbers.l_education_emi||""} onChange={setN("l_education_emi")} /></G2></>}
+              {hasL("cc") && <><div style={{ fontSize:12, fontWeight:700, color:T.slate, marginBottom:4 }}>💳 Credit card</div><G2><Field label="Outstanding" type="number" prefix="₹" value={numbers.l_cc_out||""} onChange={setN("l_cc_out")} /><Field label="Min. payment / month" type="number" prefix="₹" value={numbers.l_cc_emi||""} onChange={setN("l_cc_emi")} /></G2></>}
+            </Card>
+          )}
+
+          <Card icon="🛡️" title="Insurance cover (optional)" hint="Total sum assured, not the premium.">
+            <G2>
+              <Field label="Life cover" type="number" prefix="₹" value={numbers.ins_life||""} onChange={setN("ins_life")} />
+              <Field label="Health cover" type="number" prefix="₹" value={numbers.ins_health||""} onChange={setN("ins_health")} />
+            </G2>
+          </Card>
+
+          {(wantsGoal("home")||wantsGoal("education")||wantsGoal("travel")||wantsGoal("car")) && (
+            <Card icon="🎯" title="Goal targets (optional)" hint="Roughly what each goal costs in today's money. Leave blank for a sensible default.">
+              <G2>
+                {wantsGoal("home") && <Field label="Home cost today" type="number" prefix="₹" value={numbers.g_home||""} onChange={setN("g_home")} />}
+                {(wantsGoal("education")||hasKids) && <Field label="Education cost today" type="number" prefix="₹" value={numbers.g_education||""} onChange={setN("g_education")} />}
+                {wantsGoal("car") && <Field label="Car cost today" type="number" prefix="₹" value={numbers.g_car||""} onChange={setN("g_car")} />}
+                {wantsGoal("travel") && <Field label="Travel budget today" type="number" prefix="₹" value={numbers.g_travel||""} onChange={setN("g_travel")} />}
+              </G2>
+            </Card>
+          )}
+
+          <div style={{ display:"flex", justifyContent:"space-between", marginTop:8 }}>
             <button onClick={()=>{ setPhase("quiz"); setStep(visible.length-1); }} className="btn-navy" style={{ padding:"12px 24px", borderRadius:12, fontSize:15 }}>← Back</button>
             <button onClick={createPlan} className="btn-gold" style={{ padding:"14px 36px", borderRadius:14, fontSize:16, boxShadow:`0 8px 32px ${T.gold}40` }}>Create My Plan →</button>
           </div>
         </>
-      )}
+        );
+      })()}
     </div>
   );
 };
