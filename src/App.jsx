@@ -27,8 +27,8 @@ const T = {
   emerald: "#10B981", ruby: "#EF4444", amber: "#F59E0B", teal: "#0891B2",
   chart: ["#0A1628","#C9A84C","#0891B2","#10B981","#F59E0B","#EF4444","#8B5CF6","#EC4899"]
 };
-const DISPLAY = `'Cormorant Garamond', 'Playfair Display', Georgia, serif`;
-const BODY = `'Outfit', 'DM Sans', system-ui, sans-serif`;
+const DISPLAY = `'Playfair Display', Georgia, serif`;
+const BODY = `'Inter', system-ui, sans-serif`;
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // UTILITIES
@@ -59,7 +59,7 @@ const retCorpus = (annExp, inf, portR, yToRet, yInRet) => {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const GlobalCSS = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: ${BODY}; color: ${T.navy}; background: ${T.cream}; overflow-x: hidden; }
