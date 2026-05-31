@@ -14,7 +14,58 @@ const DEMO_MODE = false;
 const PRO_PRICE = 999; // Amount in rupees (₹999)
 const PRO_PRICE_DISPLAY = "₹999";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SHARED COOKIE STORAGE — enables single sign-on with auriswealth.co
+// (marketing site). Both apps write the auth session to a cookie scoped
+// to `.auriswealth.co` so the browser shares it across subdomains.
+// On localhost, falls back to a per-origin cookie (no Domain attribute).
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function getSharedCookieDomain() {
+  if (typeof window === "undefined") return undefined;
+  const host = window.location.hostname;
+  if (!host || host === "localhost" || host === "127.0.0.1") return undefined;
+  if (host === "auriswealth.co" || host.endsWith(".auriswealth.co")) return "auriswealth.co";
+  return undefined;
+}
+
+const sharedCookieStorage = {
+  getItem(key) {
+    if (typeof document === "undefined") return null;
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${escaped}=([^;]*)`));
+    return m ? decodeURIComponent(m[1]) : null;
+  },
+  setItem(key, value) {
+    if (typeof document === "undefined") return;
+    const domain = getSharedCookieDomain();
+    const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+    const parts = [
+      `${key}=${encodeURIComponent(value)}`,
+      "Path=/",
+      `Max-Age=${60 * 60 * 24 * 365}`,
+      "SameSite=Lax",
+    ];
+    if (isHttps) parts.push("Secure");
+    if (domain) parts.push(`Domain=${domain}`);
+    document.cookie = parts.join("; ");
+  },
+  removeItem(key) {
+    if (typeof document === "undefined") return;
+    const domain = getSharedCookieDomain();
+    const parts = [`${key}=`, "Path=/", "Max-Age=0"];
+    if (domain) parts.push(`Domain=${domain}`);
+    document.cookie = parts.join("; ");
+  },
+};
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: sharedCookieStorage,
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+});
 
 // THEME — Luxury Financial Aesthetic
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
