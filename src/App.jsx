@@ -2410,8 +2410,8 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
   );
 };
 
-export default function App() {
-  const [page, setPage] = useState("landing"); // landing | dashboard
+export default function App({ initialPage } = {}) {
+  const [page, setPage] = useState(initialPage || "landing"); // landing | dashboard | guided
   const [user, setUser] = useState(null);
   const [isDemo, setIsDemo] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
