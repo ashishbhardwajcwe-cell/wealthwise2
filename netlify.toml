@@ -8,3 +8,9 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# SPA: serve index.html for any client-side route the router handles
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
