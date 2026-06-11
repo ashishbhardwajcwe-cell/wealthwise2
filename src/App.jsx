@@ -223,7 +223,11 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
 
   const handleGoogle = async () => {
     setLoading(true); setError("");
-    const { error } = await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin } });
+    // Round-trip through Google OAuth and come back with ?app=1 so the
+    // deep-link logic skips the marketing landing and goes straight to
+    // the planner dashboard.
+    const redirectTo = `${window.location.origin}/?app=1`;
+    const { error } = await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo } });
     if (error) { setError(error.message); setLoading(false); }
   };
 
@@ -2416,6 +2420,16 @@ export default function App({ initialPage } = {}) {
   const [isDemo, setIsDemo] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const autoPopupDone = useRef(false);
+
+  // If deep-linked, open the auth modal immediately so the user can sign in
+  // and land on the dashboard in one click. If they're already signed in,
+  // the session-check effect below will push them to the dashboard anyway.
+  useEffect(() => {
+    if (deepLinkToApp && !user && !isDemo) {
+      setShowAuth(true);
+      autoPopupDone.current = true; // suppress the 20-second auto-popup
+    }
+  }, [deepLinkToApp, user, isDemo]);
 
   // Auto-popup Google login after 20 seconds (skip in demo mode)
   useEffect(() => {
