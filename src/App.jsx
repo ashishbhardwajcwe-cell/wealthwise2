@@ -2508,10 +2508,12 @@ export default function App({ initialPage } = {}) {
   useEffect(() => {
     if (!DEMO_MODE) {
       supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user) { setUser(session.user); setPage("dashboard"); }
+        if (session?.user) { setUser(session.user); setShowAuth(false); setPage("dashboard"); }
       });
+      // Also closes the auth modal: after an OAuth return the deep-link
+      // effect has already opened it, and nothing else would dismiss it.
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_,session) => {
-        if (session?.user) { setUser(session.user); setIsDemo(false); setPage("dashboard"); }
+        if (session?.user) { setUser(session.user); setIsDemo(false); setShowAuth(false); setPage("dashboard"); }
       });
       return () => subscription.unsubscribe();
     }

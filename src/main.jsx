@@ -15,7 +15,12 @@ function MarketingWithDeepLink() {
   const location = useLocation()
   const params = new URLSearchParams(location.search)
   if (params.get('app') === '1' || params.get('planner') === '1') {
-    return <Navigate to="/app" replace />
+    // CRITICAL: preserve the hash. After Google OAuth, Supabase delivers the
+    // session tokens in the URL fragment (#access_token=...). This redirect
+    // runs before the Supabase client has parsed the URL, so dropping the
+    // fragment here destroys the login and the user lands back on the auth
+    // screen signed out.
+    return <Navigate to={{ pathname: '/app', hash: location.hash }} replace />
   }
   return <MarketingRoutes />
 }
