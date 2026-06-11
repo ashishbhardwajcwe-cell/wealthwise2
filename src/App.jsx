@@ -223,7 +223,11 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
 
   const handleGoogle = async () => {
     setLoading(true); setError("");
-    const { error } = await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin } });
+    // Round-trip through Google OAuth and come back with ?app=1 so the
+    // deep-link logic skips the marketing landing and goes straight to
+    // the planner dashboard.
+    const redirectTo = `${window.location.origin}/?app=1`;
+    const { error } = await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo } });
     if (error) { setError(error.message); setLoading(false); }
   };
 
@@ -2411,11 +2415,34 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
 };
 
 export default function App() {
-  const [page, setPage] = useState("landing"); // landing | dashboard
+  // Deep-link shortcut. When the URL has ?app=1 (or /app, /planner) the
+  // user came from the marketing site explicitly intending to open the
+  // planner — skip the in-app landing page and go straight to the
+  // dashboard (or open the auth modal if they aren't signed in yet).
+  const deepLinkToApp = (() => {
+    if (typeof window === "undefined") return false;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("app") === "1") return true;
+    if (url.searchParams.get("planner") === "1") return true;
+    const path = url.pathname.replace(/\/+$/, "");
+    return path === "/app" || path === "/planner";
+  })();
+
+  const [page, setPage] = useState("landing"); // landing | dashboard | guided
   const [user, setUser] = useState(null);
   const [isDemo, setIsDemo] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const autoPopupDone = useRef(false);
+
+  // If deep-linked, open the auth modal immediately so the user can sign in
+  // and land on the dashboard in one click. If they're already signed in,
+  // the session-check effect below will push them to the dashboard anyway.
+  useEffect(() => {
+    if (deepLinkToApp && !user && !isDemo) {
+      setShowAuth(true);
+      autoPopupDone.current = true; // suppress the 20-second auto-popup
+    }
+  }, [deepLinkToApp, user, isDemo]);
 
   // Auto-popup Google login after 20 seconds (skip in demo mode)
   useEffect(() => {
