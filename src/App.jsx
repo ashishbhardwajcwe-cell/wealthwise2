@@ -2415,6 +2415,20 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
 };
 
 export default function App({ initialPage } = {}) {
+  // Deep-link shortcut. When the URL has ?app=1 / ?planner=1 or the path is
+  // /app, /app/dashboard or /planner, the user came from the marketing site
+  // explicitly intending to open the planner — skip the in-app landing page
+  // and open the auth modal straight away if they aren't signed in yet.
+  // (/app/guided is excluded: the Guided Plan wizard works without sign-in.)
+  const deepLinkToApp = (() => {
+    if (typeof window === "undefined") return false;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("app") === "1") return true;
+    if (url.searchParams.get("planner") === "1") return true;
+    const path = url.pathname.replace(/\/+$/, "");
+    return path === "/app" || path === "/app/dashboard" || path === "/planner";
+  })();
+
   const [page, setPage] = useState(initialPage || "landing"); // landing | dashboard | guided
   const [user, setUser] = useState(null);
   const [isDemo, setIsDemo] = useState(false);
