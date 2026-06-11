@@ -2414,21 +2414,8 @@ const GuidedPlanWizard = ({ onExit, onAuthClick }) => {
   );
 };
 
-export default function App() {
-  // Deep-link shortcut. When the URL has ?app=1 (or /app, /planner) the
-  // user came from the marketing site explicitly intending to open the
-  // planner — skip the in-app landing page and go straight to the
-  // dashboard (or open the auth modal if they aren't signed in yet).
-  const deepLinkToApp = (() => {
-    if (typeof window === "undefined") return false;
-    const url = new URL(window.location.href);
-    if (url.searchParams.get("app") === "1") return true;
-    if (url.searchParams.get("planner") === "1") return true;
-    const path = url.pathname.replace(/\/+$/, "");
-    return path === "/app" || path === "/planner";
-  })();
-
-  const [page, setPage] = useState("landing"); // landing | dashboard | guided
+export default function App({ initialPage } = {}) {
+  const [page, setPage] = useState(initialPage || "landing"); // landing | dashboard | guided
   const [user, setUser] = useState(null);
   const [isDemo, setIsDemo] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
