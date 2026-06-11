@@ -28,33 +28,60 @@ function getSharedCookieDomain() {
   return undefined;
 }
 
+// Browsers silently drop cookies over ~4KB. Google OAuth sessions (JWT +
+// provider token + profile) routinely exceed that, while email/password
+// sessions fit — which made Google sign-in appear broken while email
+// worked. Values are therefore split into <=3180-byte chunks stored as
+// `key.0`, `key.1`, ... (same convention as @supabase/ssr).
+const COOKIE_CHUNK_SIZE = 3180;
+
+function readRawCookie(name) {
+  if (typeof document === "undefined") return null;
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${escaped}=([^;]*)`));
+  return m ? m[1] : null;
+}
+
+function writeRawCookie(name, value, maxAge) {
+  if (typeof document === "undefined") return;
+  const domain = getSharedCookieDomain();
+  const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
+  const parts = [`${name}=${value}`, "Path=/", `Max-Age=${maxAge}`, "SameSite=Lax"];
+  if (isHttps) parts.push("Secure");
+  if (domain) parts.push(`Domain=${domain}`);
+  document.cookie = parts.join("; ");
+}
+
 const sharedCookieStorage = {
   getItem(key) {
-    if (typeof document === "undefined") return null;
-    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const m = document.cookie.match(new RegExp(`(?:^|;\\s*)${escaped}=([^;]*)`));
-    return m ? decodeURIComponent(m[1]) : null;
+    const single = readRawCookie(key);
+    if (single !== null) return decodeURIComponent(single);
+    let joined = "";
+    for (let i = 0; ; i++) {
+      const part = readRawCookie(`${key}.${i}`);
+      if (part === null) return i > 0 ? decodeURIComponent(joined) : null;
+      joined += part;
+    }
   },
   setItem(key, value) {
     if (typeof document === "undefined") return;
-    const domain = getSharedCookieDomain();
-    const isHttps = typeof window !== "undefined" && window.location.protocol === "https:";
-    const parts = [
-      `${key}=${encodeURIComponent(value)}`,
-      "Path=/",
-      `Max-Age=${60 * 60 * 24 * 365}`,
-      "SameSite=Lax",
-    ];
-    if (isHttps) parts.push("Secure");
-    if (domain) parts.push(`Domain=${domain}`);
-    document.cookie = parts.join("; ");
+    this.removeItem(key); // clear any stale single/chunked cookies first
+    const encoded = encodeURIComponent(value);
+    const yearSecs = 60 * 60 * 24 * 365;
+    if (encoded.length <= COOKIE_CHUNK_SIZE) {
+      writeRawCookie(key, encoded, yearSecs);
+      return;
+    }
+    for (let i = 0; i * COOKIE_CHUNK_SIZE < encoded.length; i++) {
+      writeRawCookie(`${key}.${i}`, encoded.slice(i * COOKIE_CHUNK_SIZE, (i + 1) * COOKIE_CHUNK_SIZE), yearSecs);
+    }
   },
   removeItem(key) {
     if (typeof document === "undefined") return;
-    const domain = getSharedCookieDomain();
-    const parts = [`${key}=`, "Path=/", "Max-Age=0"];
-    if (domain) parts.push(`Domain=${domain}`);
-    document.cookie = parts.join("; ");
+    writeRawCookie(key, "", 0);
+    for (let i = 0; readRawCookie(`${key}.${i}`) !== null; i++) {
+      writeRawCookie(`${key}.${i}`, "", 0);
+    }
   },
 };
 
@@ -66,6 +93,26 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     detectSessionInUrl: true,
   },
 });
+
+// When an OAuth round-trip fails, Supabase redirects straight back to the
+// site with the reason hidden in the URL (#error_description=... or
+// ?error_description=...). The bounce takes under a second, so without
+// surfacing it the Google button looks like it "does nothing". Capture the
+// message at page load (and strip it from the URL) so the auth modal can
+// display it. Error params never coexist with auth tokens, so stripping
+// them cannot interfere with session detection.
+function consumeOAuthErrorFromUrl() {
+  if (typeof window === "undefined") return "";
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const search = new URLSearchParams(window.location.search);
+  const desc =
+    hash.get("error_description") || search.get("error_description") ||
+    hash.get("error") || search.get("error");
+  if (!desc) return "";
+  window.history.replaceState(null, "", window.location.pathname);
+  return `Google sign-in failed: ${desc}`;
+}
+const OAUTH_ERROR_AT_LOAD = consumeOAuthErrorFromUrl();
 
 // THEME — Luxury Financial Aesthetic
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -216,7 +263,7 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
   const [mode, setMode] = useState("register"); // register | signin
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name:"", mobile:"", email:"", password:"" });
-  const [error, setError] = useState("");
+  const [error, setError] = useState(OAUTH_ERROR_AT_LOAD);
   if (!show) return null;
 
   const set = (k) => (e) => { setForm(p => ({...p, [k]: e.target.value})); setError(""); };
