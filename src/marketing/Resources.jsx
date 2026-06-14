@@ -18,7 +18,7 @@ const Hero = ({ kicker, title, lead }) => (
 export function ResourcesHub() {
   return (
     <>
-      <PageMeta title="Resources — Auris Wealth" description="Free calculators, a finance glossary, and downloadable PDFs to help you think clearly about wealth." path="/resources" />
+      <PageMeta title="Resources — Auris Cashflow" description="Free calculators, a finance glossary, and downloadable PDFs to help you think clearly about wealth." path="/resources" />
       <Hero kicker="Resources" title="Free tools to think clearly" lead="Calculators, a finance glossary and downloadable PDFs — built so you make better decisions today." />
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 24px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: 18 }}>
@@ -136,7 +136,7 @@ export function Glossary() {
   const filtered = GLOSSARY.filter(([k, v]) => !q || k.toLowerCase().includes(q.toLowerCase()) || v.toLowerCase().includes(q.toLowerCase()));
   return (
     <>
-      <PageMeta title="Finance Glossary — Auris Wealth" description="Plain-English definitions of 35+ Indian and global finance terms — AIF, PMS, ELSS, LTCG, DTAA, OROP and more." path="/resources/glossary" />
+      <PageMeta title="Finance Glossary — Auris Cashflow" description="Plain-English definitions of 35+ Indian and global finance terms — AIF, PMS, ELSS, LTCG, DTAA, OROP and more." path="/resources/glossary" />
       <Hero kicker="Glossary" title="Finance, in plain English" lead="35+ Indian and global finance terms — written so a smart friend, not a textbook, would explain them." />
       <div style={{ maxWidth: 880, margin: "0 auto", padding: "32px 24px" }}>
         <input type="search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search (e.g. PMS, LTCG, NPS)…"
@@ -158,7 +158,7 @@ export function Glossary() {
 export function Downloads() {
   return (
     <>
-      <PageMeta title="Free Downloads — Auris Wealth" description="Free PDF cheat-sheets for professionals, defence officers, NRIs and HNIs. Sign up to receive any of them." path="/resources/downloads" />
+      <PageMeta title="Free Downloads — Auris Cashflow" description="Free PDF cheat-sheets for professionals, defence officers, NRIs and HNIs. Sign up to receive any of them." path="/resources/downloads" />
       <Hero kicker="Free downloads" title="Cheat-sheets that earn their keep" lead="Short, useful PDFs you can read in 15 minutes and apply this week." />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))", gap: 16 }}>

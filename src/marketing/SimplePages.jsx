@@ -102,11 +102,11 @@ export function Audience() {
 export function About() {
   return (
     <>
-      <PageMeta title="About — Auris Wealth" description="Founded by Col (Retd.) Ashish Bhardwaj. Built for professionals, families and military officers who want clarity in their financial planning." path="/about" />
-      <PageHero kicker="About us" title="Mission planning, applied to your money." lead="Auris Wealth is a wealth advisory practice built on military precision and modern AI. We help Indian HNIs, defence officers, NRIs and salaried professionals build wealth plans that actually hold up under pressure." />
+      <PageMeta title="About — Auris Cashflow" description="Founded by Col (Retd.) Ashish Bhardwaj. Built for professionals, families and military officers who want clarity in their financial planning." path="/about" />
+      <PageHero kicker="About us" title="Mission planning, applied to your money." lead="Auris Cashflow is a wealth advisory practice built on military precision and modern AI. We help Indian HNIs, defence officers, NRIs and salaried professionals build wealth plans that actually hold up under pressure." />
       <Container>
         <h2 style={H2}>Founder</h2>
-        <p style={P}>Col (Retd.) Ashish Bhardwaj spent over two decades in the Indian Army. He started Auris Wealth so the same precision that went into mission planning could go into civilian financial planning — especially for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.</p>
+        <p style={P}>Col (Retd.) Ashish Bhardwaj spent over two decades in the Indian Army. He started Auris Cashflow so the same precision that went into mission planning could go into civilian financial planning — especially for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.</p>
         <h2 style={H2}>Team</h2>
         <p style={P}>Co-founder Diganta Das leads product and engineering. The advisory bench includes a NISM-certified planner and a chartered accountant in consulting capacity. We're hiring carefully — the team will grow as the practice does.</p>
         <h2 style={H2}>Mission</h2>
@@ -116,7 +116,7 @@ export function About() {
           <li><strong>Legal entity:</strong> Auris Pvt Ltd</li>
           <li><strong>CIN:</strong> U70200HR2026PTC141922</li>
           <li><strong>Registered office:</strong> Gurugram, Haryana, India</li>
-          <li><strong>Contact:</strong> hello@auriswealth.co</li>
+          <li><strong>Contact:</strong> hello@auriscashflow.com</li>
           <li><strong>Regulatory:</strong> NISM-certified; AMFI ARN and SEBI RIA registrations pending.</li>
         </ul>
       </Container>
@@ -128,7 +128,7 @@ export function About() {
 export function Contact() {
   return (
     <>
-      <PageMeta title="Contact Auris Wealth" description="Book a call with Col Ashish on Topmate, or send a message via the contact form. Email hello@auriswealth.co." path="/contact" />
+      <PageMeta title="Contact Auris Cashflow" description="Book a call with Col Ashish on Topmate, or send a message via the contact form. Email hello@auriscashflow.com." path="/contact" />
       <PageHero kicker="Contact" title="Talk to us" lead="Book a 30-minute call with Col Ashish on Topmate, or send a message and we'll respond within one business day." />
       <Container>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))", gap: 24 }}>
@@ -154,7 +154,7 @@ export function Contact() {
           </div>
         </div>
         <div style={{ marginTop: 32, padding: 24, borderRadius: 14, background: T.parchment, fontSize: 14, color: T.slate, lineHeight: 1.75 }}>
-          📧 hello@auriswealth.co · 🏢 Gurugram, Haryana, India · 💼 WhatsApp / LinkedIn via links in the footer.
+          📧 hello@auriscashflow.com · 🏢 Gurugram, Haryana, India · 💼 WhatsApp / LinkedIn via links in the footer.
         </div>
       </Container>
     </>
@@ -206,13 +206,13 @@ const LEGAL_PAGES = {
       ["What we collect", "Information you provide directly: name, email, phone, financial inputs used to generate your plan. Information collected automatically: pages visited, device and IP for analytics. Cookies for session continuity and analytics (with your consent under DPDP)."],
       ["Why we collect it", "To deliver the requested service (the AI Wealth Planner, the WealthWise app), to communicate with you, and to improve our offering. We do not sell personal data to third parties."],
       ["AI processing", "When you use the AI Wealth Planner, inputs are processed via Anthropic's Claude API. Personally identifying information is stripped before any API call. Anonymised inputs may be retained for service quality."],
-      ["Your rights under DPDP", "You can access, correct, withdraw consent, or request erasure of your personal data at any time by emailing hello@auriswealth.co."],
+      ["Your rights under DPDP", "You can access, correct, withdraw consent, or request erasure of your personal data at any time by emailing hello@auriscashflow.com."],
       ["Retention", "We retain data only as long as needed for the stated purpose and applicable law."],
-      ["Contact", "Data Protection Officer: hello@auriswealth.co."],
+      ["Contact", "Data Protection Officer: hello@auriscashflow.com."],
     ],
   },
   terms: {
-    title: "Terms of Service", lead: "The rules of the road for using auriswealth.co and the WealthWise app.",
+    title: "Terms of Service", lead: "The rules of the road for using auriscashflow.com and the WealthWise app.",
     body: [
       ["Acceptance", "By using this site you agree to these terms. If you don't agree, please don't use the service."],
       ["Educational use only", "Content on this site and in the WealthWise app is for educational and planning purposes. It is not personalised investment advice. Consult a SEBI-registered adviser before acting."],
@@ -225,7 +225,7 @@ const LEGAL_PAGES = {
   disclaimers: {
     title: "Investment Disclaimers", lead: "The detailed legal and regulatory disclaimers that apply to every page on this site.",
     body: [
-      ["Not investment advice", "Auris Wealth is not a SEBI-registered investment adviser at the time of writing. Content is educational only."],
+      ["Not investment advice", "Auris Cashflow is not a SEBI-registered investment adviser at the time of writing. Content is educational only."],
       ["Market risk", "All investments — equity, debt, real estate, crypto, AIF, PMS, unlisted — are subject to market risk. You may lose part or all of your invested capital."],
       ["Tax disclaimer", "Tax laws change. The tax treatment described on this site reflects our understanding as of the date of writing; consult a chartered accountant for your specific case."],
       ["Third-party platforms", "We may reference third-party platforms (UnlistedArena, CoinDCX, Razorpay, etc.). We do not endorse, and bear no responsibility for, the services of these platforms."],
@@ -243,9 +243,9 @@ const LEGAL_PAGES = {
     ],
   },
   "grievance-redressal": {
-    title: "Grievance Redressal", lead: "How to raise a concern with Auris Wealth — and what happens next.",
+    title: "Grievance Redressal", lead: "How to raise a concern with Auris Cashflow — and what happens next.",
     body: [
-      ["Step 1 — Direct to us", "Email grievance@auriswealth.co or hello@auriswealth.co with a description of the issue. We acknowledge within 24 hours and aim to resolve within 7 working days."],
+      ["Step 1 — Direct to us", "Email grievance@auriscashflow.com or hello@auriscashflow.com with a description of the issue. We acknowledge within 24 hours and aim to resolve within 7 working days."],
       ["Step 2 — Senior escalation", "If unresolved, escalate to the Compliance Officer at the same email with subject line 'Compliance Escalation'."],
       ["Step 3 — SEBI SCORES", "If still unresolved, once we are SEBI RIA-registered, file a complaint via the SEBI SCORES platform at scores.sebi.gov.in."],
       ["Records", "We maintain a register of grievances and resolutions, available for regulatory inspection."],

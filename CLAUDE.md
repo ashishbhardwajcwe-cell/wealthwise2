@@ -10,7 +10,7 @@
 
 **Current live deployment:**
 - Frontend: React 18 + Vite, hosted on Netlify
-- Domain: wealth.auris8.com (production) and auriswealth.co (marketing site)
+- Domain: app.auriscashflow.com (production app) and www.auriscashflow.com (marketing site). Brand name: **Auris Cashflow** (the wealth-planner tool inside the app is named **WealthWise**)
 - Backend: Supabase (project ref: `hbddsvwghboftjsgtate`)
 - Auth: Google OAuth via Supabase
 - AI: Claude API (model `claude-sonnet-4-20250514`) called via Supabase Edge Functions, never directly from the browser
@@ -70,8 +70,8 @@ Every feature must be built within these guardrails. Hard-code these as system-l
 │                    React 18 + Vite (Netlify)                │
 │  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐    │
 │  │ Marketing   │  │ App (auth'd) │  │ Admin dashboard  │    │
-│  │ auriswealth │  │ wealth.auris │  │ (Ashish/staff)   │    │
-│  │ .co         │  │ 8.com        │  │                  │    │
+│  │ www.auris   │  │ app.auris    │  │ (Ashish/staff)   │    │
+│  │ cashflow.com│  │ cashflow.com │  │                  │    │
 │  └─────────────┘  └──────────────┘  └──────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
                             │

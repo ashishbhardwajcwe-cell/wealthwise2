@@ -1,4 +1,4 @@
-// AurisWealth — Site Footer with social links
+// Auris Cashflow — Site Footer with social links
 // Drop-in replacement for the inline SiteFooter in App.jsx.
 // To use:  import SiteFooter from './SiteFooter';
 //          <SiteFooter T={T} DISPLAY={DISPLAY} />
@@ -79,7 +79,7 @@ const SiteFooter = ({ T, DISPLAY }) => (
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <img src="/auris-logo.png" alt="Auris" style={{ height: 32, objectFit: 'contain' }} />
         <span style={{ fontFamily: DISPLAY, fontSize: 18, color: T.white }}>
-          Auris<span style={{ color: T.gold }}>Wealth</span>
+          Auris<span style={{ color: T.gold }}>Cashflow</span>
         </span>
       </div>
 
@@ -112,7 +112,7 @@ const SiteFooter = ({ T, DISPLAY }) => (
       </div>
 
       <p style={{ color: `${T.white}25`, fontSize: 11, textAlign: 'center', marginTop: 4 }}>
-        © 2026 Auris Pvt Ltd · AurisWealth · Not SEBI registered · For informational purposes only
+        © 2026 Auris Pvt Ltd · Auris Cashflow · Not SEBI registered · For informational purposes only
       </p>
     </div>
   </footer>

@@ -150,7 +150,7 @@ export default function Home() {
             <Eyebrow>Our founder</Eyebrow>
             <H2>Col (Retd.) Ashish Bhardwaj</H2>
             <p style={{ color: T.slate, fontSize: 15.5, lineHeight: 1.75, marginTop: 12 }}>
-              Twenty-plus years in uniform taught Ashish that mission planning is the difference between getting through the night and getting hit. He started Auris Wealth so the same precision could go into civilian financial planning — for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.
+              Twenty-plus years in uniform taught Ashish that mission planning is the difference between getting through the night and getting hit. He started Auris Cashflow so the same precision could go into civilian financial planning — for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.
             </p>
             <Link to="/about" style={{ display: "inline-block", marginTop: 18, color: T.gold, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>Read the full story →</Link>
           </div>

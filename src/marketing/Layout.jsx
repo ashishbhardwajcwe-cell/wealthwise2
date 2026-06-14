@@ -11,21 +11,21 @@ const navLinkStyle = ({ isActive }) => ({
 
 export const Disclaimer = ({ extra }) => (
   <div style={{ fontSize: 11, color: `${T.white}50`, lineHeight: 1.7, marginTop: 16 }}>
-    <p>Auris Wealth is a brand of Auris Pvt Ltd (CIN: U70200HR2026PTC141922).</p>
+    <p>Auris Cashflow is a brand of Auris Pvt Ltd (CIN: U70200HR2026PTC141922).</p>
     <p>The content on this site is for educational purposes only and does not constitute investment, legal, or tax advice. Investments in mutual funds, PMS, AIF, equities, cryptocurrencies, and other instruments are subject to market risks. Past performance is not indicative of future returns. Please consult a SEBI-registered investment adviser, a chartered accountant, and a tax professional in your jurisdiction before making investment decisions.</p>
     {extra && <p style={{ marginTop: 6 }}>{extra}</p>}
-    <p>Auris Wealth, its directors, employees and contractors do not guarantee any returns and are not liable for any losses arising from decisions based on the content of this site.</p>
+    <p>Auris Cashflow, its directors, employees and contractors do not guarantee any returns and are not liable for any losses arising from decisions based on the content of this site.</p>
   </div>
 );
 
 export const PageMeta = ({ title, description, path }) => (
   <Helmet>
-    <title>{title} | Auris Wealth</title>
+    <title>{title} | Auris Cashflow</title>
     <meta name="description" content={description} />
-    <meta property="og:title" content={`${title} | Auris Wealth`} />
+    <meta property="og:title" content={`${title} | Auris Cashflow`} />
     <meta property="og:description" content={description} />
     <meta name="twitter:card" content="summary_large_image" />
-    {path && <link rel="canonical" href={`https://auriswealth.co${path}`} />}
+    {path && <link rel="canonical" href={`https://auriscashflow.com${path}`} />}
   </Helmet>
 );
 
@@ -59,7 +59,7 @@ const MarketingHeader = () => {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
           <img src="/auris-logo.png" alt="Auris" style={{ height: 40 }} />
-          <span style={{ fontFamily: DISPLAY, fontSize: 20, fontWeight: 700, color: T.navy }}>Auris<span style={{ color: T.gold }}>Wealth</span></span>
+          <span style={{ fontFamily: DISPLAY, fontSize: 20, fontWeight: 700, color: T.navy }}>Auris<span style={{ color: T.gold }}>Cashflow</span></span>
         </Link>
         <nav className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <Dropdown label="Investment Products" items={PRODUCTS.map(p => ({ to: `/investment-products/${p.slug}`, label: p.name, icon: p.icon }))} />
@@ -95,7 +95,7 @@ const MarketingFooter = () => (
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
             <img src="/auris-logo.png" alt="Auris" style={{ height: 36 }} />
-            <span style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 700, color: T.white }}>Auris<span style={{ color: T.gold }}>Wealth</span></span>
+            <span style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 700, color: T.white }}>Auris<span style={{ color: T.gold }}>Cashflow</span></span>
           </div>
           <p style={{ fontSize: 13, color: `${T.white}80`, lineHeight: 1.7 }}>AI-powered wealth planning for professionals, families and officers who want clarity.</p>
         </div>
