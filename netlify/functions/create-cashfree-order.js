@@ -49,7 +49,7 @@ exports.handler = async (event) => {
           customer_phone: customer_phone || "9999999999",
         },
         order_meta: {
-          return_url: "https://wealth.auris8.com?order_id={order_id}",
+          return_url: "https://app.auriscashflow.com?order_id={order_id}",
         },
         order_note: order_note || "Auris Payment",
       }),

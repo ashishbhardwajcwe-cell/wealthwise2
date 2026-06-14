@@ -15,16 +15,16 @@ const PRO_PRICE = 999; // Amount in rupees (₹999)
 const PRO_PRICE_DISPLAY = "₹999";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SHARED COOKIE STORAGE — enables single sign-on with auriswealth.co
+// SHARED COOKIE STORAGE — enables single sign-on with auriscashflow.com
 // (marketing site). Both apps write the auth session to a cookie scoped
-// to `.auriswealth.co` so the browser shares it across subdomains.
+// to `.auriscashflow.com` so the browser shares it across subdomains.
 // On localhost, falls back to a per-origin cookie (no Domain attribute).
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function getSharedCookieDomain() {
   if (typeof window === "undefined") return undefined;
   const host = window.location.hostname;
   if (!host || host === "localhost" || host === "127.0.0.1") return undefined;
-  if (host === "auriswealth.co" || host.endsWith(".auriswealth.co")) return "auriswealth.co";
+  if (host === "auriscashflow.com" || host.endsWith(".auriscashflow.com")) return "auriscashflow.com";
   return undefined;
 }
 
@@ -318,7 +318,7 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
         {/* Brand */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:14 }}>
           <img src="/auris-logo.png" alt="Auris" style={{ height:36, objectFit:"contain" }} />
-          <span style={{ fontFamily:DISPLAY, fontSize:20, fontWeight:700, color:T.white }}>Auris<span style={{ color:T.gold }}>Wealth</span></span>
+          <span style={{ fontFamily:DISPLAY, fontSize:20, fontWeight:700, color:T.white }}>Auris<span style={{ color:T.gold }}>Cashflow</span></span>
         </div>
 
         {/* Title */}
@@ -327,7 +327,7 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
             {mode === "register" ? "Create your account" : "Welcome back"}
           </h2>
           <p style={{ fontSize:12, color:`${T.white}55` }}>
-            {mode === "register" ? "Sign up to save & access your financial plan" : "Sign in to continue to AurisWealth"}
+            {mode === "register" ? "Sign up to save & access your financial plan" : "Sign in to continue to Auris Cashflow"}
           </p>
         </div>
 
@@ -1361,7 +1361,7 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
       {pdfConfig.cover && (
         <div className="print-cover" style={{ flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center", minHeight:"88vh", background:T.navy, color:T.white, borderRadius:0, padding:"40px", pageBreakAfter:"always" }}>
           <img src="/auris-logo.png" alt="Auris" style={{ height:64, objectFit:"contain", marginBottom:24 }} />
-          <div style={{ fontFamily:DISPLAY, fontSize:18, letterSpacing:"2px", color:T.gold, textTransform:"uppercase" }}>AurisWealth</div>
+          <div style={{ fontFamily:DISPLAY, fontSize:18, letterSpacing:"2px", color:T.gold, textTransform:"uppercase" }}>Auris Cashflow</div>
           <h1 style={{ fontFamily:DISPLAY, fontSize:40, fontWeight:700, marginTop:18 }}>Financial Independence Plan</h1>
           <p style={{ fontFamily:DISPLAY, fontStyle:"italic", fontSize:22, color:T.goldLight, marginTop:10 }}>Prepared for {data.name || "Your Name"}</p>
           <p style={{ fontSize:14, color:"#ffffff99", marginTop:8 }}>{data.city || "India"} • {new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}</p>
@@ -1785,7 +1785,7 @@ const SiteFooter = () => (
       {/* Brand */}
       <div style={{ display:"flex", alignItems:"center", gap:10 }}>
         <img src="/auris-logo.png" alt="Auris" style={{ height:32, objectFit:"contain" }} />
-        <span style={{ fontFamily:DISPLAY, fontSize:18, color:T.white }}>Auris<span style={{ color:T.gold }}>Wealth</span></span>
+        <span style={{ fontFamily:DISPLAY, fontSize:18, color:T.white }}>Auris<span style={{ color:T.gold }}>Cashflow</span></span>
       </div>
 
       {/* Social Icons */}
@@ -1820,7 +1820,7 @@ const SiteFooter = () => (
 
       {/* Legal */}
       <p style={{ color:`${T.white}25`, fontSize:11, textAlign:"center", marginTop:4 }}>
-        © 2026 Auris Pvt Ltd · AurisWealth · Not SEBI registered · For informational purposes only
+        © 2026 Auris Pvt Ltd · Auris Cashflow · Not SEBI registered · For informational purposes only
       </p>
     </div>
   </footer>

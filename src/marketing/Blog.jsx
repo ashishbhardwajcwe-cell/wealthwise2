@@ -13,7 +13,7 @@ export function BlogIndex() {
   const cats = Array.from(new Set(BLOG_POSTS.map(p => p.category)));
   return (
     <>
-      <PageMeta title="Blog — Auris Wealth" description="Sharp writing on Indian wealth: investing, planning, tax, NRI, defence, markets and the tools that matter." path="/blog" />
+      <PageMeta title="Blog — Auris Cashflow" description="Sharp writing on Indian wealth: investing, planning, tax, NRI, defence, markets and the tools that matter." path="/blog" />
       <section style={{ background: `linear-gradient(180deg, ${T.parchment}, ${T.cream})`, padding: "56px 24px 24px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: T.gold, letterSpacing: "0.08em", textTransform: "uppercase" }}>Blog</div>
@@ -45,7 +45,7 @@ export function BlogCategory() {
   const posts = BLOG_POSTS.filter(p => p.category === c);
   return (
     <>
-      <PageMeta title={`${c} posts — Auris Wealth Blog`} description={`All Auris Wealth blog posts in the ${c} category.`} path={`/blog/category/${category}`} />
+      <PageMeta title={`${c} posts — Auris Cashflow Blog`} description={`All Auris Cashflow blog posts in the ${c} category.`} path={`/blog/category/${category}`} />
       <section style={{ background: `linear-gradient(180deg, ${T.parchment}, ${T.cream})`, padding: "56px 24px 24px" }}>
         <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
           <Link to="/blog" style={{ fontSize: 13, color: T.gold, fontWeight: 700, textDecoration: "none" }}>← All posts</Link>

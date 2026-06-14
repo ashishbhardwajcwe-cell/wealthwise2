@@ -1,4 +1,4 @@
 # Single-page-app fallback: every path that isn't a real file/asset falls
 # through to index.html so React-side routing (/app, /planner, etc.) works
-# from deep-linked URLs (auriswealth.co → app.auriswealth.co/app).
+# from deep-linked URLs (auriscashflow.com → app.auriscashflow.com/app).
 /*    /index.html   200

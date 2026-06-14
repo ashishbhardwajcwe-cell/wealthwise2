@@ -1,4 +1,4 @@
-// AurisWealth — HNI / Wealth-Planner-focused landing page extras
+// Auris Cashflow — HNI / Wealth-Planner-focused landing page extras
 // Drop these between the existing Features section and CTA in App.jsx.
 import React from 'react';
 

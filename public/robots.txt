@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /app/
 
-Sitemap: https://auriswealth.co/sitemap.xml
+Sitemap: https://auriscashflow.com/sitemap.xml

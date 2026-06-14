@@ -66,7 +66,7 @@ serve(async (req) => {
           customer_phone: customerPhone,
         },
         order_meta: {
-          return_url: Deno.env.get("PAYMENT_RETURN_URL") || "https://wealth.auris8.com?order_id={order_id}",
+          return_url: Deno.env.get("PAYMENT_RETURN_URL") || "https://app.auriscashflow.com?order_id={order_id}",
         },
         order_note: order_note || "Auris Payment",
       }),
