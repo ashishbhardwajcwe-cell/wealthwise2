@@ -1,6 +1,6 @@
 # AurisWealth Rebrand — Integration Notes
 
-This branch (`claude/update-favicon-logo-rY3C8`) contains the rebrand from **WealthWise** to **AurisWealth**, plus updated social media links and HNI-focused content sections.
+This branch (`claude/update-favicon-logo-rY3C8`) contains the rebrand from **CashFlow Planner** to **AurisWealth**, plus updated social media links and HNI-focused content sections.
 
 ## ✅ Already pushed to this branch
 
@@ -12,7 +12,7 @@ This branch (`claude/update-favicon-logo-rY3C8`) contains the rebrand from **Wea
 
 ## 🔧 App.jsx changes still required (push timed out due to file size)
 
-The full updated `src/App.jsx` exists locally as the Auris-branded version. Apply these targeted edits:
+The full updated `src/App.jsx` exists locally as the PlanMyCashflows-branded version. Apply these targeted edits:
 
 ### 1. Add imports near the top of App.jsx
 ```jsx
@@ -21,10 +21,10 @@ import { TrustBar, YourJourney, Testimonials } from './LandingExtras';
 ```
 
 ### 2. Rebrand text replacements (4 places)
-- AuthModal brand span:  `Wealth<span style={{ color:T.gold }}>Wise</span>` → `Auris<span style={{ color:T.gold }}>Wealth</span>`
-- AuthModal subtitle:  `"Sign in to continue to WealthWise"` → `"Sign in to continue to AurisWealth"`
+- AuthModal brand span:  `Wealth<span style={{ color:T.gold }}>Wise</span>` → `PlanMyCashflows<span style={{ color:T.gold }}>Wealth</span>`
+- AuthModal subtitle:  `"Sign in to continue to CashFlow Planner"` → `"Sign in to continue to AurisWealth"`
 - Inline footer brand span: same rename as #1 (other occurrence)
-- Footer copyright: `· WealthWise ·` → `· AurisWealth ·`
+- Footer copyright: `· CashFlow Planner ·` → `· AurisWealth ·`
 
 ### 3. Replace inline `const SOCIALS = [...]` and `const SiteFooter = () => (...)` blocks
 Delete those two blocks entirely (now provided by `./SiteFooter`).
@@ -38,7 +38,7 @@ After the **Features** section and before the **CTA** section, insert:
 ```
 
 ### 5. Hero badge & subtitle
-- `<Badge color={T.goldLight}>AI-Powered Financial Planning</Badge>` → `<Badge color={T.goldLight}>Auris — Expert Wealth Advisory</Badge>`
+- `<Badge color={T.goldLight}>AI-Powered Financial Planning</Badge>` → `<Badge color={T.goldLight}>PlanMyCashflows — Expert Wealth Advisory</Badge>`
 - Hero subtitle text → `Built for discerning HNI clients & wealth planners. Input your income, assets and goals — get a comprehensive financial roadmap with retirement projections, estate planning insights, and AI-powered advisory.`
 - Hero stat tuples → `[["500+","Clients Guided"],["₹12Cr+","Tax Savings Found"],["4.9★","Client Rating"]]`
 
@@ -48,7 +48,7 @@ In the `App` component's return, change `<SiteFooter />` to `<SiteFooter T={T} D
 ## Companion repo: `auris8v1.3`
 
 Same branch (`claude/update-favicon-logo-rY3C8`) on `ashishbhardwajcwe-cell/auris8v1.3` already has:
-- New `favicon.svg` (Auris brand mark for browser tab)
-- YouTube → `@AurisWealth`, Instagram → `@auriswealth`, **new** Twitter/X (`x.com/auriswealth`), Facebook unchanged
+- New `favicon.svg` (PlanMyCashflows brand mark for browser tab)
+- YouTube → `@AurisWealth`, Instagram → `@planmycashflows`, **new** Twitter/X (`x.com/planmycashflows`), Facebook unchanged
 - Free Resources grid expanded from 4 → 5 cards (added X/Twitter)
 - Footer Connect column lists all 4 social platforms with correct handles

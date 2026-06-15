@@ -44,14 +44,14 @@ exports.handler = async (event) => {
         order_currency: order_currency || "INR",
         customer_details: {
           customer_id: customer_id || "guest_" + Date.now(),
-          customer_name: customer_name || "AURIS Customer",
+          customer_name: customer_name || "PLANMYCASHFLOWS Customer",
           customer_email: customer_email || "customer@auris8.com",
           customer_phone: customer_phone || "9999999999",
         },
         order_meta: {
-          return_url: "https://app.auriscashflow.com?order_id={order_id}",
+          return_url: "https://app.planmycashflows.com?order_id={order_id}",
         },
-        order_note: order_note || "Auris Payment",
+        order_note: order_note || "PlanMyCashflows Payment",
       }),
     });
 

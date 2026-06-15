@@ -1,4 +1,4 @@
-// Auris Cashflow — Site Footer with social links
+// PlanMyCashflows — Site Footer with social links
 // Drop-in replacement for the inline SiteFooter in App.jsx.
 // To use:  import SiteFooter from './SiteFooter';
 //          <SiteFooter T={T} DISPLAY={DISPLAY} />
@@ -29,8 +29,8 @@ export const SOCIALS = [
   },
   {
     name: 'Twitter / X',
-    label: '@auriswealth on X',
-    href: 'https://x.com/auriswealth',
+    label: '@planmycashflows on X',
+    href: 'https://x.com/planmycashflows',
     color: '#1DA1F2',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -40,8 +40,8 @@ export const SOCIALS = [
   },
   {
     name: 'Instagram',
-    label: 'Instagram @auriswealth',
-    href: 'https://www.instagram.com/auriswealth/',
+    label: 'Instagram @planmycashflows',
+    href: 'https://www.instagram.com/planmycashflows/',
     color: '#E1306C',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -63,7 +63,7 @@ export const SOCIALS = [
   {
     name: 'Topmate',
     label: 'Topmate — Book a Session',
-    href: 'https://topmate.io/auris8/',
+    href: 'https://topmate.io/planmycashflows/',
     color: '#7C3AED',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -77,9 +77,9 @@ const SiteFooter = ({ T, DISPLAY }) => (
   <footer style={{ background: T.navy, padding: '32px 24px 24px', borderTop: `1px solid ${T.gold}15` }}>
     <div style={{ maxWidth: 960, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <img src="/auris-logo.png" alt="Auris" style={{ height: 32, objectFit: 'contain' }} />
+        <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height: 32, objectFit: 'contain' }} />
         <span style={{ fontFamily: DISPLAY, fontSize: 18, color: T.white }}>
-          Auris<span style={{ color: T.gold }}>Cashflow</span>
+          PlanMy<span style={{ color: T.gold }}>Cashflows</span>
         </span>
       </div>
 
@@ -112,7 +112,7 @@ const SiteFooter = ({ T, DISPLAY }) => (
       </div>
 
       <p style={{ color: `${T.white}25`, fontSize: 11, textAlign: 'center', marginTop: 4 }}>
-        © 2026 Auris Pvt Ltd · Auris Cashflow · Not SEBI registered · For informational purposes only
+        © 2026 Auris Pvt Ltd · PlanMyCashflows · Not SEBI registered · For informational purposes only
       </p>
     </div>
   </footer>

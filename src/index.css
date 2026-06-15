@@ -1,0 +1,132 @@
+/* ============================================================
+   PlanMyCashflows — global glass + motion system (Vite app)
+   Mirrors the marketing site so the app and site feel like one
+   product. Plain CSS (no Tailwind here); colours match theme.js.
+   ============================================================ */
+
+:root {
+  --pmc-navy: #0A1628;
+  --pmc-gold: #C9A84C;
+  --pmc-gold-light: #E4CC7A;
+  --pmc-gold-dim: #A08030;
+  --pmc-cream: #FFFDF5;
+  --pmc-sand: #F5EFE0;
+  --pmc-offwhite: #FAFAF7;
+  --pmc-silver: #C4CDD5;
+  --pmc-slate: #5A6B80;
+}
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+::selection { background: var(--pmc-gold); color: var(--pmc-navy); }
+
+/* ---- Frosted glass surfaces ---- */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(10, 22, 40, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(196, 205, 213, 0.45);
+  box-shadow: 0 16px 44px rgba(10, 22, 40, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.glass-nav {
+  background: linear-gradient(180deg, rgba(255, 253, 245, 0.9), rgba(255, 253, 245, 0.74));
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 6px 24px rgba(10, 22, 40, 0.05);
+}
+/* dark glass nav — for the planner app's navy chrome */
+.glass-nav-dark {
+  background: linear-gradient(180deg, rgba(10, 22, 40, 0.82), rgba(10, 22, 40, 0.66));
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.22);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 14px; box-shadow: 0 8px 28px rgba(10, 22, 40, 0.07);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.glass-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 168, 76, 0.45);
+  box-shadow: 0 16px 40px rgba(10, 22, 40, 0.12);
+}
+
+/* ---- Uniform nav "heads" ---- */
+.nav-pill {
+  position: relative; display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; line-height: 1;
+  color: var(--pmc-navy); background: transparent; border: 1px solid transparent;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.nav-pill:hover {
+  color: var(--pmc-gold-dim); background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(201, 168, 76, 0.28); box-shadow: 0 4px 14px rgba(10, 22, 40, 0.06);
+}
+.nav-pill.is-active, .nav-pill[data-active="true"] {
+  color: var(--pmc-navy);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 239, 224, 0.74));
+  border-color: rgba(201, 168, 76, 0.42); box-shadow: 0 4px 16px rgba(201, 168, 76, 0.14);
+}
+.nav-pill::after {
+  content: ""; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--pmc-gold), var(--pmc-gold-light));
+  transform: scaleX(0); transform-origin: left; transition: transform .25s ease;
+}
+.nav-pill:hover::after, .nav-pill.is-active::after, .nav-pill[data-active="true"]::after { transform: scaleX(1); }
+/* dark-chrome variant (planner app) */
+.nav-pill.on-dark { color: rgba(255, 255, 255, 0.82); }
+.nav-pill.on-dark:hover { color: #fff; background: rgba(255, 255, 255, 0.1); border-color: rgba(201, 168, 76, 0.35); }
+.nav-pill.on-dark.is-active, .nav-pill.on-dark[data-active="true"] { color: #fff; background: rgba(201, 168, 76, 0.18); border-color: rgba(201, 168, 76, 0.5); }
+
+/* ---- Aurora backdrop ---- */
+.aurora { position: relative; isolation: isolate; overflow: hidden; }
+.aurora::before {
+  content: ""; position: absolute; inset: -25%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 15% 20%, rgba(201, 168, 76, 0.16), transparent 60%),
+    radial-gradient(35% 45% at 85% 12%, rgba(8, 145, 178, 0.12), transparent 60%),
+    radial-gradient(45% 55% at 78% 88%, rgba(201, 168, 76, 0.10), transparent 60%);
+  filter: blur(24px); animation: pmc-aurora 24s ease-in-out infinite alternate;
+}
+
+/* ---- Motion ---- */
+.animate-fade-up { animation: pmc-fade-up .7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-float { animation: pmc-float 6s ease-in-out infinite; }
+
+html.js-reveal .reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html.js-reveal .reveal.is-visible { opacity: 1; transform: none; }
+
+@keyframes pmc-fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes pmc-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes pmc-aurora {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(2%, -2%, 0) scale(1.05); }
+  100% { transform: translate3d(-2%, 1%, 0) scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up, .animate-float, .aurora::before { animation: none !important; }
+  html.js-reveal .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* Print: keep PDF/report exports clean */
+@media print {
+  .glass-nav, .glass-nav-dark, .no-print { display: none !important; }
+  .glass-card, .glass-panel { box-shadow: none !important; backdrop-filter: none !important; background: #fff !important; }
+}

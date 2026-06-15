@@ -215,8 +215,8 @@ export default function AIWealthPlanner() {
 
               <div style={{ marginTop: 24, padding: 20, borderRadius: 14, background: `${T.gold}12`, border: `1px solid ${T.gold}30` }}>
                 <div style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 700, color: T.navy }}>This is the surface.</div>
-                <p style={{ fontSize: 14, color: T.slate, marginTop: 6, lineHeight: 1.6 }}>The full WealthWise plan covers 16 sections including SWOT, tax harvesting, insurance gap, retirement scenarios and detailed goal planning.</p>
-                <Link to="/app" style={{ display: "inline-block", marginTop: 12, padding: "12px 24px", borderRadius: 10, background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, color: T.navy, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>Try the full WealthWise plan — free →</Link>
+                <p style={{ fontSize: 14, color: T.slate, marginTop: 6, lineHeight: 1.6 }}>The full CashFlow Planner plan covers 16 sections including SWOT, tax harvesting, insurance gap, retirement scenarios and detailed goal planning.</p>
+                <Link to="/app" style={{ display: "inline-block", marginTop: 12, padding: "12px 24px", borderRadius: 10, background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, color: T.navy, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>Try the full CashFlow Planner plan — free →</Link>
               </div>
 
               <p style={{ fontSize: 11.5, color: T.steel, marginTop: 18, lineHeight: 1.65, fontStyle: "italic" }}>
