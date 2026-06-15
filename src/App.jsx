@@ -1713,8 +1713,8 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
 const SOCIALS = [
   {
     name: "Website",
-    label: "auris8.com",
-    href: "https://auris8.com",
+    label: "auriscashflow.com",
+    href: "https://auriscashflow.com",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 17.93V18a1 1 0 00-2 0v1.93A8.001 8.001 0 014.07 13H6a1 1 0 000-2H4.07A8.001 8.001 0 0111 4.07V6a1 1 0 002 0V4.07A8.001 8.001 0 0119.93 11H18a1 1 0 000 2h1.93A8.001 8.001 0 0113 19.93z"/>

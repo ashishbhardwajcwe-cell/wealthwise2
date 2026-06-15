@@ -7,8 +7,8 @@ import React from 'react';
 export const SOCIALS = [
   {
     name: 'Website',
-    label: 'auris8.com',
-    href: 'https://auris8.com',
+    label: 'auriscashflow.com',
+    href: 'https://auriscashflow.com',
     color: '#C9A84C',
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

@@ -43,7 +43,7 @@ serve(async (req) => {
 
     const orderId = "order_" + Date.now() + "_" + crypto.randomUUID().slice(0, 8);
     const customerName = user.user_metadata?.full_name || "Customer";
-    const customerEmail = user.email || "customer@auris8.com";
+    const customerEmail = user.email || "customer@auriscashflow.com";
     const customerPhone = user.user_metadata?.phone || "9999999999";
 
     // Create order via Cashfree API (server-side, secret key stays safe)
