@@ -15,16 +15,16 @@ const PRO_PRICE = 999; // Amount in rupees (₹999)
 const PRO_PRICE_DISPLAY = "₹999";
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// SHARED COOKIE STORAGE — enables single sign-on with auriscashflow.com
+// SHARED COOKIE STORAGE — enables single sign-on with planmycashflows.com
 // (marketing site). Both apps write the auth session to a cookie scoped
-// to `.auriscashflow.com` so the browser shares it across subdomains.
+// to `.planmycashflows.com` so the browser shares it across subdomains.
 // On localhost, falls back to a per-origin cookie (no Domain attribute).
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function getSharedCookieDomain() {
   if (typeof window === "undefined") return undefined;
   const host = window.location.hostname;
   if (!host || host === "localhost" || host === "127.0.0.1") return undefined;
-  if (host === "auriscashflow.com" || host.endsWith(".auriscashflow.com")) return "auriscashflow.com";
+  if (host === "planmycashflows.com" || host.endsWith(".planmycashflows.com")) return "planmycashflows.com";
   return undefined;
 }
 
@@ -317,8 +317,8 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
 
         {/* Brand */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:14 }}>
-          <img src="/auris-logo.png" alt="Auris" style={{ height:36, objectFit:"contain" }} />
-          <span style={{ fontFamily:DISPLAY, fontSize:20, fontWeight:700, color:T.white }}>Auris<span style={{ color:T.gold }}>Cashflow</span></span>
+          <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height:36, objectFit:"contain" }} />
+          <span style={{ fontFamily:DISPLAY, fontSize:20, fontWeight:700, color:T.white }}>PlanMy<span style={{ color:T.gold }}>Cashflows</span></span>
         </div>
 
         {/* Title */}
@@ -327,7 +327,7 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
             {mode === "register" ? "Create your account" : "Welcome back"}
           </h2>
           <p style={{ fontSize:12, color:`${T.white}55` }}>
-            {mode === "register" ? "Sign up to save & access your financial plan" : "Sign in to continue to Auris Cashflow"}
+            {mode === "register" ? "Sign up to save & access your financial plan" : "Sign in to continue to PlanMyCashflows"}
           </p>
         </div>
 
@@ -407,9 +407,9 @@ const AuthModal = ({ show, onClose, onSignIn, onDemo }) => {
 // NAVBAR
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const Navbar = ({ user, isDemo, onAuthClick, onLogout, onLogoClick, onGuided, guidedActive }) => (
-  <nav className="glass no-print" style={{ position:"sticky", top:0, zIndex:100, padding:"12px 24px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:`1px solid ${T.gold}15` }}>
+  <nav className="glass-nav no-print" style={{ position:"sticky", top:0, zIndex:100, padding:"12px 24px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
     <div onClick={onLogoClick} style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer" }}>
-      <img src="/auris-logo.png" alt="Auris" style={{ height:44, objectFit:"contain" }} />
+      <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height:44, objectFit:"contain" }} />
     </div>
     <div style={{ display:"flex", alignItems:"center", gap:12 }}>
       {/* GUIDED PLAN TAB — separate YNAB-style guided experience */}
@@ -471,7 +471,7 @@ const Landing = ({ onGetStarted, onAuth }) => (
       <div style={{ position:"absolute", inset:0, background:`url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A84C' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
 
       <div className="fadeUp" style={{ position:"relative", zIndex:1, textAlign:"center", maxWidth:720, padding:"0 24px" }}>
-        <Badge color={T.goldLight}>Auris — Expert Wealth Advisory</Badge>
+        <Badge color={T.goldLight}>PlanMyCashflows — Expert Wealth Advisory</Badge>
         <h1 style={{ fontFamily:DISPLAY, fontSize:"clamp(36px,6vw,60px)", fontWeight:700, color:T.white, lineHeight:1.15, marginTop:20 }}>
           Your Roadmap to<br/><span className="gold-shimmer" style={{ fontSize:"clamp(40px,7vw,68px)" }}>Financial Independence</span>
         </h1>
@@ -1357,11 +1357,11 @@ const ReportView = ({ data, getAge, onBack, aiAnalysis, aiLoading, onRequestAI, 
       <PrintStyles sections={pdfConfig.sections} />
       <PdfExportModal show={showPdfModal} onClose={()=>setShowPdfModal(false)} config={pdfConfig} setConfig={setPdfConfig} onGenerate={generatePdf} />
 
-      {/* PRINT-ONLY COVER PAGE (Auris branded) */}
+      {/* PRINT-ONLY COVER PAGE (PlanMyCashflows branded) */}
       {pdfConfig.cover && (
         <div className="print-cover" style={{ flexDirection:"column", alignItems:"center", justifyContent:"center", textAlign:"center", minHeight:"88vh", background:T.navy, color:T.white, borderRadius:0, padding:"40px", pageBreakAfter:"always" }}>
-          <img src="/auris-logo.png" alt="Auris" style={{ height:64, objectFit:"contain", marginBottom:24 }} />
-          <div style={{ fontFamily:DISPLAY, fontSize:18, letterSpacing:"2px", color:T.gold, textTransform:"uppercase" }}>Auris Cashflow</div>
+          <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height:64, objectFit:"contain", marginBottom:24 }} />
+          <div style={{ fontFamily:DISPLAY, fontSize:18, letterSpacing:"2px", color:T.gold, textTransform:"uppercase" }}>PlanMyCashflows</div>
           <h1 style={{ fontFamily:DISPLAY, fontSize:40, fontWeight:700, marginTop:18 }}>Financial Independence Plan</h1>
           <p style={{ fontFamily:DISPLAY, fontStyle:"italic", fontSize:22, color:T.goldLight, marginTop:10 }}>Prepared for {data.name || "Your Name"}</p>
           <p style={{ fontSize:14, color:"#ffffff99", marginTop:8 }}>{data.city || "India"} • {new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"})}</p>
@@ -1735,8 +1735,8 @@ const SOCIALS = [
   },
   {
     name: "Twitter / X",
-    label: "@auriswealth on X",
-    href: "https://x.com/auriswealth",
+    label: "@planmycashflows on X",
+    href: "https://x.com/planmycashflows",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.727-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -1746,8 +1746,8 @@ const SOCIALS = [
   },
   {
     name: "Instagram",
-    label: "Instagram @auriswealth",
-    href: "https://www.instagram.com/auriswealth/",
+    label: "Instagram @planmycashflows",
+    href: "https://www.instagram.com/planmycashflows/",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
@@ -1769,7 +1769,7 @@ const SOCIALS = [
   {
     name: "Topmate",
     label: "Topmate — Book a Session",
-    href: "https://topmate.io/auris8/",
+    href: "https://topmate.io/planmycashflows/",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2a5 5 0 110 10A5 5 0 0112 2zm0 12c5.523 0 10 2.239 10 5v1a1 1 0 01-1 1H3a1 1 0 01-1-1v-1c0-2.761 4.477-5 10-5z"/>
@@ -1784,8 +1784,8 @@ const SiteFooter = () => (
     <div style={{ maxWidth:960, margin:"0 auto", display:"flex", flexDirection:"column", alignItems:"center", gap:18 }}>
       {/* Brand */}
       <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-        <img src="/auris-logo.png" alt="Auris" style={{ height:32, objectFit:"contain" }} />
-        <span style={{ fontFamily:DISPLAY, fontSize:18, color:T.white }}>Auris<span style={{ color:T.gold }}>Cashflow</span></span>
+        <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height:32, objectFit:"contain" }} />
+        <span style={{ fontFamily:DISPLAY, fontSize:18, color:T.white }}>PlanMy<span style={{ color:T.gold }}>Cashflows</span></span>
       </div>
 
       {/* Social Icons */}
@@ -1820,7 +1820,7 @@ const SiteFooter = () => (
 
       {/* Legal */}
       <p style={{ color:`${T.white}25`, fontSize:11, textAlign:"center", marginTop:4 }}>
-        © 2026 Auris Pvt Ltd · Auris Cashflow · Not SEBI registered · For informational purposes only
+        © 2026 Auris Pvt Ltd · PlanMyCashflows · Not SEBI registered · For informational purposes only
       </p>
     </div>
   </footer>

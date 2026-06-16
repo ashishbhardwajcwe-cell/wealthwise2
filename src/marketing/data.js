@@ -457,7 +457,7 @@ When you want exposure to a strategy mutual funds and PMS cannot offer — priva
 The financial advice that exists in India is either generic (too broad to be useful) or boutique (too expensive for most). Officers transitioning out of service get neither.
 
 ## The mission
-WealthWise is the platform I wish my younger self had. AI-powered planning that adapts to your actual situation — military pension, DSOP, AGIF, resettlement — and gives you a structured plan in minutes.
+CashFlow Planner is the platform I wish my younger self had. AI-powered planning that adapts to your actual situation — military pension, DSOP, AGIF, resettlement — and gives you a structured plan in minutes.
 
 ## Why now
 The tools have finally caught up to the problem. Claude and similar AI models can do the heavy lifting on personalised analysis. Supabase and modern web infrastructure mean a small team can ship a serious product. And the audience — Indian HNIs, defence officers, NRIs — has been under-served for too long.
@@ -482,7 +482,7 @@ Skipping this for 20 years on a ₹50 L equity portfolio that compounds at 12% l
 ## What to watch out for
 Don't trigger STCG by accident — only LTCG (units held over 12 months) qualifies. Track your year-to-date realised gains so you don't blow past the ₹1.25 L threshold and trigger 12.5% tax on the excess.
 
-## The WealthWise way
+## The CashFlow Planner way
 Our tax-harvesting engine flags eligible lots through the year and triggers a March sprint so the full ₹1.25 L is used cleanly.`,
   },
   { slug:"nri-investing-rulebook", category:"NRI", title:"NRI investing in India: the 2026 rulebook",
@@ -573,8 +573,8 @@ export const DOWNLOADS = [
 
 export const SOCIALS = [
   { name:"YouTube", href:"https://www.youtube.com/@AurisWealth" },
-  { name:"X (Twitter)", href:"https://x.com/auriswealth" },
-  { name:"Instagram", href:"https://www.instagram.com/auriswealth/" },
+  { name:"X (Twitter)", href:"https://x.com/planmycashflows" },
+  { name:"Instagram", href:"https://www.instagram.com/planmycashflows/" },
   { name:"LinkedIn", href:"https://www.linkedin.com/" },
   { name:"Facebook", href:"https://www.facebook.com/profile.php?id=61576522393432" },
 ];

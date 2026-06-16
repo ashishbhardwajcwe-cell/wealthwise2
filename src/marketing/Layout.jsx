@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { T, DISPLAY, BODY } from "./theme";
@@ -11,33 +11,33 @@ const navLinkStyle = ({ isActive }) => ({
 
 export const Disclaimer = ({ extra }) => (
   <div style={{ fontSize: 11, color: `${T.white}50`, lineHeight: 1.7, marginTop: 16 }}>
-    <p>Auris Cashflow is a brand of Auris Pvt Ltd (CIN: U70200HR2026PTC141922).</p>
+    <p>PlanMyCashflows is a brand of Auris Pvt Ltd (CIN: U70200HR2026PTC141922).</p>
     <p>The content on this site is for educational purposes only and does not constitute investment, legal, or tax advice. Investments in mutual funds, PMS, AIF, equities, cryptocurrencies, and other instruments are subject to market risks. Past performance is not indicative of future returns. Please consult a SEBI-registered investment adviser, a chartered accountant, and a tax professional in your jurisdiction before making investment decisions.</p>
     {extra && <p style={{ marginTop: 6 }}>{extra}</p>}
-    <p>Auris Cashflow, its directors, employees and contractors do not guarantee any returns and are not liable for any losses arising from decisions based on the content of this site.</p>
+    <p>PlanMyCashflows, its directors, employees and contractors do not guarantee any returns and are not liable for any losses arising from decisions based on the content of this site.</p>
   </div>
 );
 
 export const PageMeta = ({ title, description, path }) => (
   <Helmet>
-    <title>{title} | Auris Cashflow</title>
+    <title>{title} | PlanMyCashflows</title>
     <meta name="description" content={description} />
-    <meta property="og:title" content={`${title} | Auris Cashflow`} />
+    <meta property="og:title" content={`${title} | PlanMyCashflows`} />
     <meta property="og:description" content={description} />
     <meta name="twitter:card" content="summary_large_image" />
-    {path && <link rel="canonical" href={`https://auriscashflow.com${path}`} />}
+    {path && <link rel="canonical" href={`https://planmycashflows.com${path}`} />}
   </Helmet>
 );
 
-const Dropdown = ({ label, items }) => {
+const Dropdown = ({ label, items, active }) => {
   const [open, setOpen] = useState(false);
   return (
     <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} style={{ position: "relative" }}>
-      <button style={{ ...navLinkStyle({}), background: "transparent", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 4 }}>
+      <button className="nav-pill" data-active={active ? "true" : undefined}>
         {label} <span style={{ fontSize: 10 }}>▾</span>
       </button>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, minWidth: 260, background: T.white, borderRadius: 12, boxShadow: "0 12px 32px rgba(10,22,40,0.12)", border: `1px solid ${T.gold}15`, padding: 8, zIndex: 50 }}>
+        <div className="glass-panel" style={{ position: "absolute", top: "100%", left: 0, minWidth: 260, borderRadius: 12, padding: 8, zIndex: 50 }}>
           {items.map(it => (
             <Link key={it.to} to={it.to} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 8, fontSize: 14, color: T.navy, textDecoration: "none", transition: "background 0.15s" }}
               onMouseEnter={e => e.currentTarget.style.background = `${T.gold}10`}
@@ -54,21 +54,22 @@ const Dropdown = ({ label, items }) => {
 
 const MarketingHeader = () => {
   const [mobile, setMobile] = useState(false);
+  const { pathname } = useLocation();
   return (
-    <header className="no-print" style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(255,253,245,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${T.gold}15` }}>
+    <header className="no-print glass-nav" style={{ position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "14px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <img src="/auris-logo.png" alt="Auris" style={{ height: 40 }} />
-          <span style={{ fontFamily: DISPLAY, fontSize: 20, fontWeight: 700, color: T.navy }}>Auris<span style={{ color: T.gold }}>Cashflow</span></span>
+          <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height: 40 }} />
+          <span style={{ fontFamily: DISPLAY, fontSize: 20, fontWeight: 700, color: T.navy }}>PlanMy<span style={{ color: T.gold }}>Cashflows</span></span>
         </Link>
         <nav className="hide-mobile" style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <Dropdown label="Investment Products" items={PRODUCTS.map(p => ({ to: `/investment-products/${p.slug}`, label: p.name, icon: p.icon }))} />
-          <Dropdown label="For" items={AUDIENCES.map(a => ({ to: `/for/${a.slug}`, label: a.name, icon: a.icon }))} />
-          <NavLink to="/ai-wealth-planner" style={navLinkStyle}>AI Planner</NavLink>
-          <NavLink to="/wealthwise" style={navLinkStyle}>WealthWise</NavLink>
-          <NavLink to="/blog" style={navLinkStyle}>Blog</NavLink>
-          <NavLink to="/pricing" style={navLinkStyle}>Pricing</NavLink>
-          <NavLink to="/about" style={navLinkStyle}>About</NavLink>
+          <Dropdown label="Investment Products" active={pathname.startsWith("/investment-products")} items={PRODUCTS.map(p => ({ to: `/investment-products/${p.slug}`, label: p.name, icon: p.icon }))} />
+          <Dropdown label="For" active={pathname.startsWith("/for")} items={AUDIENCES.map(a => ({ to: `/for/${a.slug}`, label: a.name, icon: a.icon }))} />
+          <NavLink to="/ai-wealth-planner" className={({ isActive }) => isActive ? "nav-pill is-active" : "nav-pill"}>AI Planner</NavLink>
+          <NavLink to="/wealthwise" className={({ isActive }) => isActive ? "nav-pill is-active" : "nav-pill"}>CashFlow Planner</NavLink>
+          <NavLink to="/blog" className={({ isActive }) => isActive ? "nav-pill is-active" : "nav-pill"}>Blog</NavLink>
+          <NavLink to="/pricing" className={({ isActive }) => isActive ? "nav-pill is-active" : "nav-pill"}>Pricing</NavLink>
+          <NavLink to="/about" className={({ isActive }) => isActive ? "nav-pill is-active" : "nav-pill"}>About</NavLink>
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Link to="/app" style={{ padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 700, background: T.white, color: T.navy, border: `1.5px solid ${T.gold}40`, textDecoration: "none" }}>Open the App</Link>
@@ -77,8 +78,8 @@ const MarketingHeader = () => {
         </div>
       </div>
       {mobile && (
-        <div className="show-mobile" style={{ borderTop: `1px solid ${T.silver}30`, padding: "12px 24px", display: "flex", flexDirection: "column", gap: 6, background: T.cream }}>
-          {[{ to: "/", l: "Home" }, { to: "/wealthwise", l: "WealthWise" }, { to: "/ai-wealth-planner", l: "AI Planner" },
+        <div className="show-mobile glass" style={{ borderTop: `1px solid ${T.silver}30`, padding: "12px 24px", display: "flex", flexDirection: "column", gap: 6 }}>
+          {[{ to: "/", l: "Home" }, { to: "/wealthwise", l: "CashFlow Planner" }, { to: "/ai-wealth-planner", l: "AI Planner" },
             { to: "/blog", l: "Blog" }, { to: "/pricing", l: "Pricing" }, { to: "/about", l: "About" }, { to: "/contact", l: "Contact" },
             { to: "/resources", l: "Resources" }, { to: "/app", l: "Open the App" }].map(x =>
             <Link key={x.to} to={x.to} onClick={() => setMobile(false)} style={{ padding: "10px 12px", color: T.navy, fontWeight: 600, textDecoration: "none", borderRadius: 8 }}>{x.l}</Link>)}
@@ -94,8 +95,8 @@ const MarketingFooter = () => (
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32 }}>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <img src="/auris-logo.png" alt="Auris" style={{ height: 36 }} />
-            <span style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 700, color: T.white }}>Auris<span style={{ color: T.gold }}>Cashflow</span></span>
+            <img src="/auris-logo.png" alt="PlanMyCashflows" style={{ height: 36 }} />
+            <span style={{ fontFamily: DISPLAY, fontSize: 18, fontWeight: 700, color: T.white }}>PlanMy<span style={{ color: T.gold }}>Cashflows</span></span>
           </div>
           <p style={{ fontSize: 13, color: `${T.white}80`, lineHeight: 1.7 }}>AI-powered wealth planning for professionals, families and officers who want clarity.</p>
         </div>
@@ -103,7 +104,7 @@ const MarketingFooter = () => (
           { h: "Products", links: PRODUCTS.slice(0, 6).map(p => ({ to: `/investment-products/${p.slug}`, l: p.name })) },
           { h: "For", links: AUDIENCES.map(a => ({ to: `/for/${a.slug}`, l: a.name })) },
           { h: "Resources", links: [{ to: "/resources/calculators", l: "Calculators" }, { to: "/resources/glossary", l: "Glossary" }, { to: "/resources/downloads", l: "Free Downloads" }, { to: "/blog", l: "Blog" }] },
-          { h: "Company", links: [{ to: "/about", l: "About" }, { to: "/contact", l: "Contact" }, { to: "/pricing", l: "Pricing" }, { to: "/wealthwise", l: "WealthWise" }] },
+          { h: "Company", links: [{ to: "/about", l: "About" }, { to: "/contact", l: "Contact" }, { to: "/pricing", l: "Pricing" }, { to: "/wealthwise", l: "CashFlow Planner" }] },
           { h: "Legal", links: [{ to: "/legal/privacy", l: "Privacy" }, { to: "/legal/terms", l: "Terms" }, { to: "/legal/disclaimers", l: "Disclaimers" }, { to: "/legal/sebi-compliance", l: "SEBI Compliance" }, { to: "/legal/grievance-redressal", l: "Grievance Redressal" }] },
         ].map(col => (
           <div key={col.h}>

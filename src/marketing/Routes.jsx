@@ -3,7 +3,7 @@ import MarketingLayout from "./Layout";
 import Home from "./Home";
 import ProductPage from "./ProductPage";
 import AIWealthPlanner from "./AIWealthPlanner";
-import { WealthWise, Audience, About, Contact, Pricing, Legal } from "./SimplePages";
+import { CashFlowPlanner, Audience, About, Contact, Pricing, Legal } from "./SimplePages";
 import { BlogIndex, BlogCategory, BlogPost } from "./Blog";
 import { ResourcesHub, CalculatorsIndex, CalculatorPage, Glossary, Downloads } from "./Resources";
 
@@ -17,7 +17,7 @@ export default function MarketingRoutes() {
           <Route path=":product" element={<ProductPage />} />
         </Route>
         <Route path="ai-wealth-planner" element={<AIWealthPlanner />} />
-        <Route path="wealthwise" element={<WealthWise />} />
+        <Route path="wealthwise" element={<CashFlowPlanner />} />
         <Route path="for/:audience" element={<Audience />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />

@@ -1,4 +1,4 @@
-# WealthWise — Financial Independence Planner
+# CashFlow Planner — Financial Independence Planner
 
 A comprehensive financial planning web application that generates personalized financial independence reports with SWOT analysis, retirement scenarios, goal planning, and AI-powered recommendations.
 

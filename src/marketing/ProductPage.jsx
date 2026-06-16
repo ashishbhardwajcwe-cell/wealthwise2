@@ -84,11 +84,11 @@ export default function ProductPage() {
           </ol>
         </section>
 
-        {/* HOW AURIS HELPS */}
+        {/* HOW PLANMYCASHFLOWS HELPS */}
         <section style={{ marginBottom: 48 }}>
-          <h2 style={{ fontFamily: DISPLAY, fontSize: 30, fontWeight: 700, color: T.navy, marginBottom: 14 }}>How Auris helps</h2>
+          <h2 style={{ fontFamily: DISPLAY, fontSize: 30, fontWeight: 700, color: T.navy, marginBottom: 14 }}>How PlanMyCashflows helps</h2>
           <p style={{ fontSize: 16, color: T.slate, lineHeight: 1.75 }}>
-            Inside the WealthWise app, {p.name} is mapped into your portfolio aggregator, included in the goal traffic-light, factored into your Freedom Number, and (where applicable) covered by the tax harvesting engine. The Guided Plan walks you through whether this product fits your situation, with a personalised explanation tied to your inputs.
+            Inside the CashFlow Planner app, {p.name} is mapped into your portfolio aggregator, included in the goal traffic-light, factored into your Freedom Number, and (where applicable) covered by the tax harvesting engine. The Guided Plan walks you through whether this product fits your situation, with a personalised explanation tied to your inputs.
           </p>
           <Link to="/app/guided" style={{ display: "inline-block", marginTop: 16, padding: "12px 24px", borderRadius: 10, background: T.navy, color: T.white, fontWeight: 600, fontSize: 14, textDecoration: "none" }}>Use the Guided Plan →</Link>
         </section>

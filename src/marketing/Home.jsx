@@ -26,7 +26,7 @@ export default function Home() {
       {/* HERO */}
       <Section bg={`linear-gradient(180deg, ${T.cream} 0%, ${T.parchment} 70%, ${T.cream} 100%)`} pad="84px 24px 56px">
         <div style={{ textAlign: "center", maxWidth: 820, margin: "0 auto" }}>
-          <Eyebrow center>Auris — Expert Wealth Advisory</Eyebrow>
+          <Eyebrow center>PlanMyCashflows — Expert Wealth Advisory</Eyebrow>
           <h1 style={{ fontFamily: DISPLAY, fontSize: "clamp(38px,6vw,64px)", fontWeight: 700, color: T.navy, lineHeight: 1.08, letterSpacing: "-1px" }}>
             Wealth that compounds.<br /><span style={{ color: T.gold }}>Plans that hold under fire.</span>
           </h1>
@@ -35,7 +35,7 @@ export default function Home() {
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 34, flexWrap: "wrap" }}>
             <Link to="/ai-wealth-planner" style={{ padding: "16px 36px", borderRadius: 14, background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, color: T.navy, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: `0 10px 32px ${T.gold}40` }}>Try the AI Wealth Planner</Link>
-            <a href="https://topmate.io/auris8/" target="_blank" rel="noreferrer" style={{ padding: "16px 30px", borderRadius: 14, background: T.white, color: T.navy, fontWeight: 600, fontSize: 16, textDecoration: "none", border: `1.5px solid ${T.navy}25` }}>Talk to Ashish →</a>
+            <a href="https://topmate.io/planmycashflows/" target="_blank" rel="noreferrer" style={{ padding: "16px 30px", borderRadius: 14, background: T.white, color: T.navy, fontWeight: 600, fontSize: 16, textDecoration: "none", border: `1.5px solid ${T.navy}25` }}>Talk to Ashish →</a>
           </div>
           <p style={{ marginTop: 28, fontSize: 12, color: T.steel }}>Run by Auris Pvt Ltd (CIN: U70200HR2026PTC141922) · NISM-certified · DPDP compliant</p>
         </div>
@@ -87,12 +87,12 @@ export default function Home() {
         <Eyebrow center>How it works</Eyebrow>
         <H2 center>From scattered to unified</H2>
         <p style={{ textAlign: "center", color: T.slate, fontSize: 16, maxWidth: 600, margin: "12px auto 36px" }}>
-          Most investors have money in five places, a plan in none. WealthWise brings everything into one view, then tells you what to do next.
+          Most investors have money in five places, a plan in none. CashFlow Planner brings everything into one view, then tells you what to do next.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr 60px 1fr", gap: 16, alignItems: "center", maxWidth: 1000, margin: "0 auto" }}>
           {[
             { icon: "🌀", title: "Scattered", lines: ["MF in 3 AMCs", "Stocks in 2 brokers", "FDs in 4 banks", "PMS, AIF, gold, crypto"] },
-            { icon: "⚙️", title: "Unified by WealthWise", lines: ["One portfolio view", "AI-generated plan", "Tax harvesting", "Goal tracking"] },
+            { icon: "⚙️", title: "Unified by CashFlow Planner", lines: ["One portfolio view", "AI-generated plan", "Tax harvesting", "Goal tracking"] },
             { icon: "🎯", title: "A coherent plan", lines: ["Retirement on track", "Tax optimised", "Risk right-sized", "Reviewed quarterly"] },
           ].map((b, i, arr) => (
             <>
@@ -150,7 +150,7 @@ export default function Home() {
             <Eyebrow>Our founder</Eyebrow>
             <H2>Col (Retd.) Ashish Bhardwaj</H2>
             <p style={{ color: T.slate, fontSize: 15.5, lineHeight: 1.75, marginTop: 12 }}>
-              Twenty-plus years in uniform taught Ashish that mission planning is the difference between getting through the night and getting hit. He started Auris Cashflow so the same precision could go into civilian financial planning — for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.
+              Twenty-plus years in uniform taught Ashish that mission planning is the difference between getting through the night and getting hit. He started PlanMyCashflows so the same precision could go into civilian financial planning — for fellow officers transitioning out, for HNIs who deserve better than commission-led advice, and for professionals who don't have time to figure it all out.
             </p>
             <Link to="/about" style={{ display: "inline-block", marginTop: 18, color: T.gold, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>Read the full story →</Link>
           </div>
@@ -182,7 +182,7 @@ export default function Home() {
           <p style={{ color: `${T.white}80`, fontSize: 16, marginTop: 14 }}>Five minutes of inputs. A full snapshot of where you stand and what to do next.</p>
           <div style={{ display: "flex", gap: 14, justifyContent: "center", marginTop: 28, flexWrap: "wrap" }}>
             <Link to="/ai-wealth-planner" style={{ padding: "16px 36px", borderRadius: 14, background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight})`, color: T.navy, fontWeight: 700, fontSize: 16, textDecoration: "none" }}>Try the AI Planner</Link>
-            <a href="https://topmate.io/auris8/" target="_blank" rel="noreferrer" style={{ padding: "16px 30px", borderRadius: 14, background: `${T.white}10`, color: T.white, fontWeight: 600, fontSize: 16, textDecoration: "none", border: `1.5px solid ${T.white}25` }}>Talk to Ashish</a>
+            <a href="https://topmate.io/planmycashflows/" target="_blank" rel="noreferrer" style={{ padding: "16px 30px", borderRadius: 14, background: `${T.white}10`, color: T.white, fontWeight: 600, fontSize: 16, textDecoration: "none", border: `1.5px solid ${T.white}25` }}>Talk to Ashish</a>
           </div>
           <div style={{ marginTop: 36, padding: 20, borderRadius: 14, background: `${T.white}08`, textAlign: "left" }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: T.goldLight, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Subscribe to the newsletter</div>
