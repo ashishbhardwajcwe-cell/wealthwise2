@@ -1,12 +1,14 @@
-# AurisWealth Rebrand — Integration Notes
+# Auris Cashflow Rebrand — Integration Notes
 
-This branch (`claude/update-favicon-logo-rY3C8`) contains the rebrand from **WealthWise** to **AurisWealth**, plus updated social media links and HNI-focused content sections.
+> **Current branding (June 2026):** The product is **Auris Cashflow** (marketing site `www.auriscashflow.com`, app `app.auriscashflow.com`). The wealth-planner tool inside the app keeps the name **WealthWise**. The historical notes below document an earlier WealthWise → AurisWealth migration; brand names have since been updated to Auris Cashflow throughout the codebase.
+
+This file records the rebrand history for `src/App.jsx`, plus updated social media links and HNI-focused content sections.
 
 ## ✅ Already pushed to this branch
 
 | File | Change |
 |------|--------|
-| `index.html` | Favicon → `/auris-logo.png`, title → `AurisWealth — Financial Independence Planner`, OG meta tags |
+| `index.html` | Favicon → `/auris-logo.png`, title → `Auris Cashflow — Financial Independence Planner`, OG meta tags |
 | `src/SiteFooter.jsx` | **NEW** — modular site footer with all corrected social links + Twitter/X |
 | `src/LandingExtras.jsx` | **NEW** — `TrustBar`, `YourJourney` (HNI), `Testimonials` components |
 
@@ -22,9 +24,9 @@ import { TrustBar, YourJourney, Testimonials } from './LandingExtras';
 
 ### 2. Rebrand text replacements (4 places)
 - AuthModal brand span:  `Wealth<span style={{ color:T.gold }}>Wise</span>` → `Auris<span style={{ color:T.gold }}>Wealth</span>`
-- AuthModal subtitle:  `"Sign in to continue to WealthWise"` → `"Sign in to continue to AurisWealth"`
+- AuthModal subtitle:  `"Sign in to continue to WealthWise"` → `"Sign in to continue to Auris Cashflow"`
 - Inline footer brand span: same rename as #1 (other occurrence)
-- Footer copyright: `· WealthWise ·` → `· AurisWealth ·`
+- Footer copyright: `· WealthWise ·` → `· Auris Cashflow ·`
 
 ### 3. Replace inline `const SOCIALS = [...]` and `const SiteFooter = () => (...)` blocks
 Delete those two blocks entirely (now provided by `./SiteFooter`).
